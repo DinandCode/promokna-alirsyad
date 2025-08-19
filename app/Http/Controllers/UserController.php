@@ -1,0 +1,272 @@
+<?php
+
+namespace App\Http\Controllers;
+
+use App\Http\Requests\UserRegistrationRequest;
+use App\Mail\PaymentNotificationMail;
+use App\Mail\RegistrationSuccessMail;
+use App\Models\Participant;
+use App\Models\Payment;
+use App\Models\Setting;
+use App\Models\Ticket;
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Mail;
+use Midtrans\Config;
+use Midtrans\Snap;
+use TCPDF;
+
+class UserController extends Controller
+{
+    /**
+     * Handle user registration form submission.
+     */
+    public function attemptRegister(UserRegistrationRequest $request)
+    {
+        $validatedData = $request->validated();
+
+        $paidTotal = Participant::whereHas('payment', function ($query) {
+            $query->whereNot('status', 'expired');
+        })->count();
+        $freeTotal = Participant::doesntHave('payment')->count();
+
+        Log::info("[Attempt Register] Paid user total: $paidTotal, free user total: $freeTotal");
+
+        $freeLimit = Setting::get(Setting::KEY_EVENT_FREE_MEMBER_LIMIT);
+        $paidLimit = Setting::get(Setting::KEY_EVENT_PAID_MEMBER_LIMIT);
+
+        if ($paidTotal >= $paidLimit && (isset($validatedData['jersey_size']) && $validatedData['jersey_size'] != null)) {
+            return back();
+        }
+
+        if ($freeTotal >= $freeLimit && !isset($validatedData['jersey_size'])) {
+            return back();
+        }
+
+        $registrationStatus = Setting::get(Setting::KEY_REGISTRATION_STATUS);
+        if ($registrationStatus != 'open' || ($paidTotal >= $paidLimit && $freeTotal >= $freeLimit)) {
+            abort(403);
+        }
+
+        try {
+            return DB::transaction(function () use ($validatedData) {
+                $lastBib = Participant::orderByDesc('bib')->value('bib');
+
+                $lastBibNumber = $lastBib ? intval($lastBib) : 0;
+
+                $validatedData['bib'] = str_pad(strval($lastBibNumber + 1), 4, "0", STR_PAD_LEFT);
+                $validatedData['accept_promo'] = isset($validatedData['accept_promo']);
+                $participant = Participant::create($validatedData);
+
+                if (isset($validatedData['jersey_size']) && $validatedData['jersey_size'] != null) {
+                    $ids = $this->setupPaymentRecord($participant);
+
+                    return redirect()->route('payment.pay', [
+                        'participant' => $ids[0],
+                        'payment' => $ids[1],
+                    ]);
+                } else {
+                    Mail::to($participant->email)->send(new RegistrationSuccessMail($participant));
+                    return redirect()->route('user.register-success', $participant->id);
+                }
+            });
+        } catch (\Throwable $th) {
+            return redirect()->back()->withInput()->with('error', 'Terjadi kesalahan, harap coba beberapa saat lagi: ' . $th->getMessage());
+        }
+    }
+
+    public function registerSuccess(Participant $participant)
+    {
+        return view('payments.success', compact('participant'));
+    }
+
+    public function attemptRegisterPaid(Request $request)
+    {
+        $data = $request->validate([
+            'name' => 'required|string',
+            'email' => 'required|email',
+            'phone' => 'required',
+            'birth_date' => 'required|date',
+            'gender' => 'required|in:L,P',
+            'address' => 'required|string',
+            'account_name' => 'required|string',
+            'payment_amount' => 'required|numeric|min:1',
+            'payment_proof' => 'required|file|mimes:jpg,jpeg,png,pdf|max:2048',
+        ]);
+
+        // Upload bukti pembayaran
+        if ($request->hasFile('payment_proof')) {
+            $data['payment_proof_path'] = $request->file('payment_proof')->store('bukti_pembayaran', 'public');
+        }
+
+        // Simpan ke database
+        $participant = Participant::create($data); // Sesuaikan kolom model
+
+        return redirect()->route('user.register-success', ['participant' => $participant->id]);
+    }
+
+    public function attemptRegisterFree(Request $request)
+    {
+        // Validasi input
+        $data = $request->validate([
+            'name' => 'required|string',
+            'email' => 'required|email',
+            'phone' => 'required',
+            'birth_date' => 'required|date',
+            'gender' => 'required|in:L,P',
+            'address' => 'required|string',
+        ]);
+
+        // Simpan ke tabel participants atau sesuai modelmu
+        Participant::create($data);
+
+        return redirect()->route('user.register-success', ['participant' => $data['id'] ?? 1]);
+    }
+
+    public function attemptRegisterTicket(UserRegistrationRequest $request)
+    {
+        $validatedData = $request->validated();
+        $ticket = Ticket::find($validatedData['ticket_id']);
+
+        $freeTotal = Participant::doesntHave('payment')->where('ticket_id', $ticket->id)->count();
+        $ticketLimit = $ticket->quota;
+
+        if ($ticketLimit != null && $freeTotal >= $ticketLimit) {
+            return back();
+        }
+
+        $registrationStatus = Setting::get(Setting::KEY_REGISTRATION_STATUS);
+        if ($registrationStatus != 'open') {
+            abort(403);
+        }
+
+        try {
+            $participant = DB::transaction(function () use ($validatedData) {
+                $lastBib = Participant::orderByDesc('bib')->value('bib');
+                $lastBibNumber = $lastBib ? intval($lastBib) : 0;
+
+                $validatedData['bib'] = "80" . str_pad(strval($lastBibNumber + 1), 4, "0", STR_PAD_LEFT);
+                $validatedData['accept_promo'] = isset($validatedData['accept_promo']);
+
+                $participant = Participant::create($validatedData);
+                Mail::to($participant->email)->send(new RegistrationSuccessMail($participant));
+
+                return $participant;
+            });
+        } catch (\Throwable $th) {
+            return redirect()->back()->withInput()->with('error', 'Terjadi kesalahan, harap coba beberapa saat lagi: ' . $th->getMessage());
+        }
+
+        return redirect()->route('user.register-success', ['participant' => $participant->id]);
+    }
+
+    protected function setupPaymentRecord(Participant $participant)
+    {
+        $paymentAmount = floatval(Setting::get(Setting::KEY_PAYMENT_AMOUNT));
+        $paymentRatePercent = floatval(str_replace(',', '.', Setting::get(Setting::KEY_PAYMENT_RATE_PERCENT)));
+
+        $rate = $paymentRatePercent * $paymentAmount / 100;
+        $totalPaid = $paymentAmount + $rate;
+
+        Config::$serverKey = config('services.midtrans.server_key');
+        Config::$isProduction = config('services.midtrans.is_production');
+        Config::$isSanitized = true;
+        Config::$is3ds = true;
+        Config::$overrideNotifUrl = config('services.midtrans.notif_url');
+
+        $orderId = 'REG-' . $participant->id . '-' . time();
+        Log::info("Creating payment $orderId when done captured by: " . config('services.midtrans.notif_url') . "");
+
+        $transaction = [
+            'transaction_details' => [
+                'order_id' => $orderId,
+                'gross_amount' => intval(ceil($totalPaid)),
+            ],
+            'customer_details' => [
+                'first_name' => $participant->first_name,
+                'last_name' => $participant->last_name,
+                'email' => $participant->email
+            ],
+            'enabled_payments' => ['other_qris']
+        ];
+
+        $snapToken = Snap::getSnapToken($transaction);
+
+        $payment = Payment::create([
+            'participant_id' => $participant->id,
+            'amount' => $paymentAmount,
+            'total_amount' => $totalPaid,
+            'rate' => $rate,
+            'midtrans_order_id' => $orderId,
+            'midtrans_snap_token' => $snapToken
+        ]);
+
+        Mail::to($participant->email)->send(new PaymentNotificationMail($participant, $payment));
+
+        return [$participant->id, $payment->id];
+    }
+
+    public function listUser()
+    {
+        $query = request('query');
+        $participants = [];
+
+        if ($query) {
+            $participantsQuery = Participant::query()
+                ->where(function ($q) {
+                    $q->whereDoesntHave('payment')
+                        ->orWhereHas('payment', function ($paymentQuery) {
+                            $paymentQuery->where('status', 'paid');
+                        });
+                });
+
+            $participantsQuery->where('bib', str_replace("60-", "", $query));
+
+            $participants = $participantsQuery->orderBy('bib')->paginate(10);
+        }
+
+        return view('home.peserta', compact('participants', 'query'));
+    }
+
+    public function printBIB($bib)
+    {
+        $participant = DB::table('participants')->where('bib', $bib)->first();
+
+        $widthMm = 300;
+        $heightMm = 140;
+
+        $pdf = new TCPDF('L', 'mm', [$widthMm, $heightMm], true, 'UTF-8', false);
+        $pdf->SetMargins(0, 0, 0);
+        $pdf->SetAutoPageBreak(false, 0);
+        $pdf->AddPage();
+
+        // Background image
+        $templatePath = resource_path('images/bib-polos-ump.png');
+        $pdf->Image($templatePath, 0, 0, $widthMm, $heightMm, '', '', '', false, 300, '', false, false, 0);
+
+        // Set text color and font
+        $pdf->SetTextColor(0, 0, 0);
+
+        $yOffset = 15;
+
+        // --- Full Name ---
+        $pdf->SetFont('helvetica', '', 18); // Smaller font
+        $pdf->SetXY(0, $yOffset + 25); // adjust Y
+        $pdf->Cell($widthMm, 10, ucwords($participant->full_name), 0, 1, 'C');
+
+        // --- BIB Number ---
+        $pdf->SetFont('helvetica', 'B', 80); // Large bold font
+        $pdf->SetXY(0, $yOffset + 35); // Y position can be adjusted
+        $pdf->Cell($widthMm, 10, str_pad($participant->bib, 4, "0", STR_PAD_LEFT), 0, 1, 'C');
+
+        // --- BIB Name ---
+        $pdf->SetFont('helvetica', '', 40); // Medium font
+        $pdf->SetXY(0, $yOffset + 70); // adjust Y
+        $pdf->Cell($widthMm, 10, strtoupper($participant->bib_name), 0, 1, 'C');
+
+        // Output
+        $pdf->Output('BIB_' . $participant->bib . '.pdf', 'I');
+    }
+}
