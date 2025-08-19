@@ -150,10 +150,17 @@ class UserController extends Controller
             ]);
         }
 
-        $freeTotal = Participant::doesntHave('payment')->where('ticket_id', $ticket->id)->count();
+        $total = Participant::doesntHave('payment')->where('ticket_id', $ticket->id)->count();
+
+        if ($ticket->price != null) {
+            $total = Participant::whereHas('payment', function ($query) {
+                $query->where('status', 'paid');
+            })->where('ticket_id', $ticket->id)->count();
+        }
+
         $ticketLimit = $ticket->quota;
 
-        if ($ticketLimit != null && $freeTotal >= $ticketLimit) {
+        if ($ticketLimit != null && $total >= $ticketLimit) {
             return back();
         }
 
@@ -172,7 +179,7 @@ class UserController extends Controller
                 $validatedData['user_id'] = $user->id;
 
                 $participant = Participant::create($validatedData);
-                
+
                 $ticket->last_bib = $lastBibNumber + 1;
                 $ticket->save();
 
@@ -261,50 +268,49 @@ class UserController extends Controller
         return view('home.peserta', compact('participants', 'query'));
     }
 
-   public function printBIB($bib)
-{
-    $participant = DB::table('participants')->where('bib', $bib)->first();
+    public function printBIB($bib)
+    {
+        $participant = DB::table('participants')->where('bib', $bib)->first();
 
-    // Ambil ukuran asli gambar
-    $templatePath = public_path('images/BIB MUSLIM FUN RUN.png'); // pastikan pakai .png atau sesuai ekstensi
+        // Ambil ukuran asli gambar
+        $templatePath = public_path('images/BIB MUSLIM FUN RUN.png'); // pastikan pakai .png atau sesuai ekstensi
 
-    list($widthPx, $heightPx) = getimagesize($templatePath);
-    $dpi = 300; // resolusi cetak
-    $widthMm = ($widthPx / $dpi) * 25.4;  // px → mm
-    $heightMm = ($heightPx / $dpi) * 25.4;
+        list($widthPx, $heightPx) = getimagesize($templatePath);
+        $dpi = 300; // resolusi cetak
+        $widthMm = ($widthPx / $dpi) * 25.4;  // px → mm
+        $heightMm = ($heightPx / $dpi) * 25.4;
 
-    // Buat PDF dengan ukuran sesuai gambar
-    $pdf = new TCPDF('L', 'mm', [$widthMm, $heightMm], true, 'UTF-8', false);
-    $pdf->SetMargins(0, 0, 0);
-    $pdf->SetAutoPageBreak(false, 0);
-    $pdf->AddPage();
+        // Buat PDF dengan ukuran sesuai gambar
+        $pdf = new TCPDF('L', 'mm', [$widthMm, $heightMm], true, 'UTF-8', false);
+        $pdf->SetMargins(0, 0, 0);
+        $pdf->SetAutoPageBreak(false, 0);
+        $pdf->AddPage();
 
-    // Background image fit penuh
-    $pdf->Image($templatePath, 0, 0, $widthMm, $heightMm, '', '', '', false, 300, '', false, false, 0);
+        // Background image fit penuh
+        $pdf->Image($templatePath, 0, 0, $widthMm, $heightMm, '', '', '', false, 300, '', false, false, 0);
 
-    // Warna teks
-    $pdf->SetTextColor(0, 0, 0);
+        // Warna teks
+        $pdf->SetTextColor(0, 0, 0);
 
-    // Offset margin atas biar lebih rapi
-    $yOffset = 20;
+        // Offset margin atas biar lebih rapi
+        $yOffset = 20;
 
-    // --- Full Name ---
-    $pdf->SetFont('helvetica', '', 18);
-    $pdf->SetXY(0, $yOffset + 10); 
-    $pdf->Cell($widthMm, 10, ucwords($participant->full_name), 0, 1, 'C');
+        // --- Full Name ---
+        $pdf->SetFont('helvetica', '', 18);
+        $pdf->SetXY(0, $yOffset + 10);
+        $pdf->Cell($widthMm, 10, ucwords($participant->full_name), 0, 1, 'C');
 
-    // --- BIB Number ---
-    $pdf->SetFont('helvetica', 'B', 80);
-    $pdf->SetXY(0, $yOffset + 30); 
-    $pdf->Cell($widthMm, 20, str_pad($participant->bib, 4, "0", STR_PAD_LEFT), 0, 1, 'C');
+        // --- BIB Number ---
+        $pdf->SetFont('helvetica', 'B', 80);
+        $pdf->SetXY(0, $yOffset + 30);
+        $pdf->Cell($widthMm, 20, str_pad($participant->bib, 4, "0", STR_PAD_LEFT), 0, 1, 'C');
 
-    // --- BIB Name ---
-    $pdf->SetFont('helvetica', '', 40);
-    $pdf->SetXY(0, $yOffset + 70); 
-    $pdf->Cell($widthMm, 20, strtoupper($participant->bib_name), 0, 1, 'C');
+        // --- BIB Name ---
+        $pdf->SetFont('helvetica', '', 40);
+        $pdf->SetXY(0, $yOffset + 70);
+        $pdf->Cell($widthMm, 20, strtoupper($participant->bib_name), 0, 1, 'C');
 
-    // Output
-    $pdf->Output('BIB_' . $participant->bib . '.pdf', 'I');
-}
-
+        // Output
+        $pdf->Output('BIB_' . $participant->bib . '.pdf', 'I');
+    }
 }

@@ -23,7 +23,7 @@ class UserRegistrationRequest extends FormRequest
     {
         return [
             // Informasi Umum
-            'bib_name' => 'required|string|max:255',
+            'bib_name' => 'required|string|max:8',
             'full_name' => 'required|string|max:255',
             'email' => 'required|email|unique:participants,email',
             'phone' => 'required|string|max:20',

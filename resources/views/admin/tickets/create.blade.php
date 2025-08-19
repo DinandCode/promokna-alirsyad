@@ -53,13 +53,13 @@
                     </div>
 
                     {{-- Quota --}}
-                    {{-- <div class="mb-4">
+                    <div class="mb-4">
                         <label for="quota" class="block text-sm font-medium text-gray-700">Quota (optional)</label>
                         <input type="number" id="quota" name="quota" value="{{ old('quota') }}"
                             class="mt-1 block w-full p-2 border-gray-300 rounded-md shadow-sm focus:border-blue-500 focus:ring-blue-500 sm:text-sm"
                             min="1" placeholder="Kosongkan untuk tiket tak terbatas">
                         <p class="text-sm text-gray-500 mt-1">Jika kosong maka kuota akan tak terbatas, jika isi pastikan lebih dari 0</p>
-                    </div> --}}
+                    </div>
 
                     {{-- Max Tries --}}
                     <div class="mb-4">

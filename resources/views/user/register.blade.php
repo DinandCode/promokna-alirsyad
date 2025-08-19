@@ -29,7 +29,7 @@
                             email: '{{ old('email') }}',
                             phone: '{{ old('phone') }}',
                             community: '{{ old('community') }}',
-                            gender: '{{ old('gender') }}',
+                            gender: 'male',
                             {{-- nik: '{{ old('nik') }}', --}}
                             birthplace: '{{ old('birthplace') }}',
                             birthdate: '{{ old('birthdate') }}',
@@ -170,12 +170,12 @@
                             <div x-show="step === 2" class="space-y-4">
                                 <div>
                                     <label for="gender">Jenis Kelamin <span class="text-red-700">*</span></label>
-                                    <select id="gender" name="gender" x-model="form.gender"
-                                        class="w-full p-2 border rounded @error('gender') border-red-500 @enderror">
-                                        <option value="">Pilih Jenis Kelamin</option>
+                                    <select id="gender" name="gender" x-model="form.gender" readonly
+                                        class="w-full p-2 border read-only:cursor-not-allowed read-only:bg-gray-300 rounded @error('gender') border-red-500 @enderror">
                                         <option value="male">Laki-laki</option>
                                         <option value="female">Perempuan</option>
                                     </select>
+                                    <span class="text-red-700">Event ini khusus untuk ikhwan</span>
                                     @error('gender')
                                         <p class="text-red-500 text-sm mt-1">{{ $message }}</p>
                                     @enderror
