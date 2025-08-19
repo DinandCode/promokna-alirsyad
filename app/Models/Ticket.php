@@ -12,6 +12,7 @@ class Ticket extends Model
         'quota',
         'max_tries',
         'bib_prefix',
-        'type_match'
+        'type_match',
+        'last_bib'
     ];
 }

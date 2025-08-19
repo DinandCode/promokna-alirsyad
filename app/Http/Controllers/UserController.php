@@ -163,15 +163,19 @@ class UserController extends Controller
         }
 
         try {
-            return DB::transaction(function () use ($validatedData, $ticket, $user) {
-                $lastBib = Participant::orderByDesc('bib')->value('bib');
-                $lastBibNumber = $lastBib ? intval($lastBib) : 0;
+            return DB::transaction(function () use ($validatedData, $user) {
+                $ticket = Ticket::find($validatedData['ticket_id']);
+                $lastBibNumber = $ticket->last_bib;
 
                 $validatedData['bib'] = ($ticket->bib_prefix ?? "80") . str_pad(strval($lastBibNumber + 1), 3, "0", STR_PAD_LEFT);
                 $validatedData['accept_promo'] = isset($validatedData['accept_promo']);
                 $validatedData['user_id'] = $user->id;
 
                 $participant = Participant::create($validatedData);
+                
+                $ticket->last_bib = $lastBibNumber + 1;
+                $ticket->save();
+
                 if ($ticket->price && $ticket->price > 0) {
                     $ids = $this->setupPaymentRecord($participant, $ticket->price);
 
@@ -180,6 +184,7 @@ class UserController extends Controller
                         'payment' => $ids[1],
                     ]);
                 }
+
                 Mail::to($participant->email)->send(new RegistrationSuccessMail($participant));
                 return $participant;
             });
