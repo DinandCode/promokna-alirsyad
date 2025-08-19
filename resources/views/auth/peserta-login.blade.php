@@ -6,7 +6,7 @@
 <div class="min-h-screen flex items-center justify-center bg-gray-100 px-4">
     <div class="bg-white shadow-lg rounded-lg w-full max-w-md p-8">
         <h2 class="text-2xl font-bold text-center mb-6">
-            Login Peserta - Tiket {{ $ticketId }}
+            Login Peserta - Tiket {{ $ticket->name }}
         </h2>
 
         @if ($errors->any())
@@ -15,13 +15,13 @@
             </div>
         @endif
 
-        <form method="POST" action="{{ route('peserta.login.submit', $ticketId) }}">
+        <form method="POST" action="{{ route('peserta.login.submit', $ticket->id) }}">
             @csrf
 
             <div class="mb-4">
-                <label for="name" class="block font-medium">Nama Lengkap</label>
-                <input type="text" id="name" name="name" required
-                    value="{{ old('name') }}"
+                <label for="nama" class="block font-medium">Nama Lengkap</label>
+                <input type="text" id="nama" name="nama" required
+                    value="{{ old('nama') }}"
                     class="w-full mt-1 px-4 py-2 border rounded-lg focus:ring-2 focus:ring-red-500">
             </div>
 

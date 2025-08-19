@@ -79,7 +79,7 @@ class PaymentController extends Controller
 
         // Kirim email notifikasi pembayaran berhasil
         Mail::to($payment->participant->email)->send(new RegistrationSuccessMail($payment->participant));
-        Mail::to($payment->participant->email)->send(new ParticipantConfirmationMail($payment->participant));
+        // Mail::to($payment->participant->email)->send(new ParticipantConfirmationMail($payment->participant));
 
         Log::info("Payment successfully processed for order: " . $orderId);
     }

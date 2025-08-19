@@ -271,7 +271,7 @@
                         class="mx-auto w-1/2 max-w-2xl rounded shadow-lg">
                 </div>
                 <!-- <div class="text-xl italic max-w-2xl mx-auto">"Amazing, these guys absolutely rocked the house down solid for 3 hours straight..."</div>
-                                                      <div class="mt-4 font-bold">- Jenny Compers ★★★★★</div> -->
+                                                          <div class="mt-4 font-bold">- Jenny Compers ★★★★★</div> -->
             </div>
         </section>
 

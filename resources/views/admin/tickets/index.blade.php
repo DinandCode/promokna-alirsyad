@@ -26,10 +26,16 @@
                                     No</th>
                                 <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
                                     Nama Tiket</th>
-                                {{-- <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                                    Price</th> --}}
                                 <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                                    Kuota</th>
+                                    Price</th>
+                                <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                    Max Percobaan</th>
+                                <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                    BIB Prefix</th>
+                                <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                    Tipe</th>
+                                {{-- <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                    Kuota</th> --}}
                                 <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
                                     Aksi</th>
                             </tr>
@@ -39,9 +45,11 @@
                                 <tr>
                                     <td class="px-6 py-4 whitespace-nowrap">{{ $loop->iteration }}</td>
                                     <td class="px-6 py-4 whitespace-nowrap">{{ $ticket->name }}</td>
-                                    {{-- <td class="px-6 py-4 whitespace-nowrap">{{ number_format($ticket->price, 0, ',', '.') }}
-                                    </td> --}}
-                                    <td class="px-6 py-4 whitespace-nowrap">{{ $ticket->quota ?? 'Tak Terbatas' }}</td>
+                                    <td class="px-6 py-4 whitespace-nowrap">{{ number_format($ticket->price, 0, ',', '.') }}
+                                    </td>
+                                    <td class="px-6 py-4 whitespace-nowrap">{{ $ticket->max_tries ?? 'Tak Terbatas' }}</td>
+                                    <td class="px-6 py-4 whitespace-nowrap">{{ $ticket->bib_prefix ?? 'Bawaan' }}</td>
+                                    <td class="px-6 py-4 whitespace-nowrap">{{ $ticket->type_match }}</td>
                                     <td class="px-6 py-4 whitespace-nowrap">
                                         <a href="{{ route('admin.tickets.edit', $ticket->id) }}"
                                             class="px-3 py-1 bg-yellow-400 text-white rounded-md text-sm hover:bg-yellow-500">Edit</a>

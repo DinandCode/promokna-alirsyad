@@ -9,7 +9,9 @@ use App\Models\Participant;
 use App\Models\Payment;
 use App\Models\Setting;
 use App\Models\Ticket;
+use App\Models\User;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Log;
@@ -61,7 +63,7 @@ class UserController extends Controller
                 $participant = Participant::create($validatedData);
 
                 if (isset($validatedData['jersey_size']) && $validatedData['jersey_size'] != null) {
-                    $ids = $this->setupPaymentRecord($participant);
+                    $ids = $this->setupPaymentRecord($participant, 0);
 
                     return redirect()->route('payment.pay', [
                         'participant' => $ids[0],
@@ -77,8 +79,13 @@ class UserController extends Controller
         }
     }
 
-    public function registerSuccess(Participant $participant)
+    public function registerSuccess(Participant $participant, Request $request)
     {
+        Auth::logout();
+
+        $request->session()->invalidate();
+        $request->session()->regenerateToken();
+
         return view('payments.success', compact('participant'));
     }
 
@@ -130,6 +137,19 @@ class UserController extends Controller
         $validatedData = $request->validated();
         $ticket = Ticket::find($validatedData['ticket_id']);
 
+        $user = User::find(Auth::user()->id);
+
+        if ($ticket->type_match != $user->type) {
+            Auth::logout();
+
+            $request->session()->invalidate();
+            $request->session()->regenerateToken();
+
+            return redirect()->route('peserta.login', $ticket->id)->withErrors([
+                'login' => 'Akun anda tidak dapat mendaftar kategori ini'
+            ]);
+        }
+
         $freeTotal = Participant::doesntHave('payment')->where('ticket_id', $ticket->id)->count();
         $ticketLimit = $ticket->quota;
 
@@ -143,28 +163,39 @@ class UserController extends Controller
         }
 
         try {
-            $participant = DB::transaction(function () use ($validatedData) {
-                $lastBib = Participant::orderByDesc('bib')->value('bib');
-                $lastBibNumber = $lastBib ? intval($lastBib) : 0;
+            return DB::transaction(function () use ($validatedData, $user) {
+                $ticket = Ticket::find($validatedData['ticket_id']);
+                $lastBibNumber = $ticket->last_bib;
 
-                $validatedData['bib'] = "80" . str_pad(strval($lastBibNumber + 1), 4, "0", STR_PAD_LEFT);
+                $validatedData['bib'] = ($ticket->bib_prefix ?? "80") . str_pad(strval($lastBibNumber + 1), 3, "0", STR_PAD_LEFT);
                 $validatedData['accept_promo'] = isset($validatedData['accept_promo']);
+                $validatedData['user_id'] = $user->id;
 
                 $participant = Participant::create($validatedData);
-                Mail::to($participant->email)->send(new RegistrationSuccessMail($participant));
+                
+                $ticket->last_bib = $lastBibNumber + 1;
+                $ticket->save();
 
+                if ($ticket->price && $ticket->price > 0) {
+                    $ids = $this->setupPaymentRecord($participant, $ticket->price);
+
+                    return redirect()->route('payment.pay', [
+                        'participant' => $ids[0],
+                        'payment' => $ids[1],
+                    ]);
+                }
+
+                Mail::to($participant->email)->send(new RegistrationSuccessMail($participant));
                 return $participant;
             });
         } catch (\Throwable $th) {
             return redirect()->back()->withInput()->with('error', 'Terjadi kesalahan, harap coba beberapa saat lagi: ' . $th->getMessage());
         }
-
-        return redirect()->route('user.register-success', ['participant' => $participant->id]);
     }
 
-    protected function setupPaymentRecord(Participant $participant)
+    protected function setupPaymentRecord(Participant $participant, $price)
     {
-        $paymentAmount = floatval(Setting::get(Setting::KEY_PAYMENT_AMOUNT));
+        $paymentAmount = floatval($price);
         $paymentRatePercent = floatval(str_replace(',', '.', Setting::get(Setting::KEY_PAYMENT_RATE_PERCENT)));
 
         $rate = $paymentRatePercent * $paymentAmount / 100;
