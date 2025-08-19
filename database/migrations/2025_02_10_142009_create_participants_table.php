@@ -27,7 +27,7 @@ return new class extends Migration
             $table->date('birthdate')->nullable();
             $table->string('address')->nullable();
             $table->string('city')->nullable();
-            $table->enum('jersey_size', ['XXS', 'XS', 'S', 'M', 'L', 'XL', 'XXL'])->nullable();
+            $table->string('jersey_size')->nullable();
             // informasi kesehatan
             $table->string('blood_type')->nullable();
             $table->string('medical_history')->nullable();
