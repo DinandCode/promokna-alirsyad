@@ -253,7 +253,7 @@ class UserController extends Controller
                         });
                 });
 
-            $participantsQuery->where('bib', str_replace("60-", "", $query));
+            $participantsQuery->where('bib', $query);
 
             $participants = $participantsQuery->orderBy('bib')->paginate(10);
         }

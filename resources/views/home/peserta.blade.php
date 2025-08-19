@@ -30,7 +30,7 @@
                 @foreach ($participants as $participant)
                     <div class="flex items-center justify-between bg-gray-100 rounded-lg p-4 gap-4">
                         <span
-                            class="text-sm bg-green-500 text-white px-3 py-1 rounded-lg">60-{{ str_pad($participant->bib ?? 0, 4, '0', STR_PAD_LEFT) }}</span>
+                            class="text-sm bg-green-500 text-white px-3 py-1 rounded-lg">{{ str_pad($participant->bib ?? 0, 4, '0', STR_PAD_LEFT) }}</span>
                         <div class="flex items-center space-x-4 mr-auto">
                             <div>
                                 <h3 class="font-bold text-gray-800">{{ $participant->bib_name }}</h3>
