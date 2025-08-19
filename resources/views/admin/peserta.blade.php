@@ -45,7 +45,7 @@
             <div class="bg-white shadow rounded-lg p-4 mb-4 border border-gray-300">
                 <div class="bg-blue-500 text-white py-2 px-4 rounded-t-lg font-bold flex justify-between items-center">
                     <span>
-                        No Peserta / BIB: 60-<span x-text="item.bib"></span>
+                        No Peserta / BIB: <span x-text="item.bib"></span>
                     </span>
                     <template x-if="item.payment_status == 'paid'">
                         <span class="inline-block py-1 px-2 rounded-lg bg-green-500">Lunas</span>
