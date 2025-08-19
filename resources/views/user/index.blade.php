@@ -25,16 +25,14 @@
 
             <!-- Grid Card Responsif -->
             <div class="flex gap-4 flex-col md:flex-row">
-           <div class="space-y-4">
-    @foreach ($tickets as $item)
-        <a href="{{ route('peserta.login', ['ticket' => $item->id]) }}"
-            class="block text-center bg-blue-700 text-white py-2 rounded hover:bg-blue-800 transition">
-            {{ $item->name }}
-        </a>
-    @endforeach
-</div>
-
-
+                <div class="space-y-4">
+                    @foreach ($tickets as $item)
+                        <a href="{{ route('peserta.login', ['ticket' => $item->id]) }}"
+                            class="block text-center bg-blue-700 text-white py-2 rounded hover:bg-blue-800 transition">
+                            {{ $item->name }}
+                        </a>
+                    @endforeach
+                </div>
             </div>
 
             <!-- Tombol Close -->
@@ -163,7 +161,7 @@
                         class="mx-auto w-1/2 max-w-2xl rounded shadow-lg">
                 </div>
                 <!-- <div class="text-xl italic max-w-2xl mx-auto">"Amazing, these guys absolutely rocked the house down solid for 3 hours straight..."</div>
-                                                      <div class="mt-4 font-bold">- Jenny Compers ★★★★★</div> -->
+                                                          <div class="mt-4 font-bold">- Jenny Compers ★★★★★</div> -->
             </div>
         </section>
 
@@ -230,8 +228,6 @@
                             'polygon.jpg',
                             'Langgeng jaya.png',
                             'gerai.jpeg',
-
-                            
                         ];
                     @endphp
 

@@ -50,4 +50,9 @@ class User extends Authenticatable
     {
         return $this->role === $role;
     }
+
+    public function participants()
+    {
+        return $this->hasMany(Participant::class);
+    }
 }

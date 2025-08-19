@@ -21,6 +21,25 @@ class UserSeeder extends Seeder
             'phone' => '088232400859',
             'password' => Hash::make('admin123'),
             'role' => 'super-admin',
+            'type' => 'admin'
+        ]);
+
+        User::create([
+            'first_name' => 'Pimpinan',
+            'last_name' => 'Nomor 1',
+            'email' => 'SIPALING PIMPINAN',
+            'phone' => '088232400859',
+            'password' => '123456',
+            'type' => 'pimpinan'
+        ]);
+
+        User::create([
+            'first_name' => 'Siswa',
+            'last_name' => 'Nomor 1',
+            'email' => 'SIPALING SISWA',
+            'phone' => '088232400859',
+            'password' => '123456',
+            'type' => 'siswa'
         ]);
     }
 }

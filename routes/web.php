@@ -19,13 +19,6 @@ Route::get('/', [HomeController::class, 'index'])->name('home.index');
 Route::get('/registration', [HomeController::class, 'register'])->name('user.register');
 Route::post('/registration', [UserController::class, 'attemptRegister'])->name('user.attempt-register');
 
-// Form pendaftaran GRATIS
-Route::get('/registration/{ticket:id}', [HomeController::class, 'registerTicket'])->name('user.register-ticket');
-Route::post('/registration', [UserController::class, 'attemptRegisterTicket'])->name('user.attempt-register-ticket');
-
-Route::get('/register-success/{participant:id}', [UserController::class, 'registerSuccess'])->name('user.register-success');
-Route::get('/pay/{participant:id}/payment/{payment:id}', [PaymentController::class, 'pay'])->withoutScopedBindings()->name('payment.pay');
-
 Route::get('/peserta', [UserController::class, 'listUser'])->name('user.peserta');
 Route::get('/peserta/{bib}/print-bib', [UserController::class, 'printBIB'])->name('user.print-bib');
 
@@ -43,6 +36,12 @@ Route::middleware('auth')->group(function () {
     Route::get('/dashboard', [AdminController::class, 'index'])->name('admin.index');
 
     Route::get('/admin', [AdminController::class, 'peserta'])->name('admin.peserta');
+
+    Route::get('/registration/{ticket:id}', [HomeController::class, 'registerTicket'])->name('user.register-ticket');
+    Route::post('/registration', [UserController::class, 'attemptRegisterTicket'])->name('user.attempt-register-ticket');
+
+    Route::get('/register-success/{participant:id}', [UserController::class, 'registerSuccess'])->name('user.register-success');
+    Route::get('/pay/{participant:id}/payment/{payment:id}', [PaymentController::class, 'pay'])->withoutScopedBindings()->name('payment.pay');
 
     Route::get('/trator', [AdminController::class, 'administrator'])->name('admin.administrator')->middleware('can:is-superadmin');
     Route::get('/report', [AdminController::class, 'laporan'])->name('admin.laporan')->middleware(EnsureUserIsAdmin::class);

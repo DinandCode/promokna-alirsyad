@@ -23,7 +23,10 @@ class TicketController extends Controller
         $validated = $request->validate([
             'name'  => 'required|string|max:255',
             'price' => 'nullable|integer|min:1',
-            'quota' => 'nullable|integer|min:1'
+            'quota' => 'nullable|integer|min:1',
+            'max_tries' => 'nullable|integer|min:1',
+            'bib_prefix' => 'nullable',
+            'type_match' => 'required'
         ]);
 
         Ticket::create($validated);
@@ -49,15 +52,12 @@ class TicketController extends Controller
         $tiket = Ticket::find($id);
         // Validasi input
         $validated = $request->validate([
-            'name'  => ['required', 'string', 'max:255'],
-            'price' => ['nullable', 'numeric', 'min:1'],
-            'quota' => [
-                'nullable',
-                'integer',
-                'min:1', // pastikan minimal 1 jika diisi
-            ],
-        ], [
-            'quota.min' => 'Quota minimal adalah 1 jika diisi.',
+            'name'  => 'required|string|max:255',
+            'price' => 'nullable|integer|min:1',
+            'quota' => 'nullable|integer|min:1',
+            'max_tries' => 'nullable|integer|min:1',
+            'bib_prefix' => 'nullable',
+            'type_match' => 'required'
         ]);
 
         // Update data tiket

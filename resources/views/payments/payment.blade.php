@@ -3,7 +3,7 @@
 @section('title', config('app.name') . ' | Pembayaran Pendaftaran')
 
 @push('head')
-    <script src="https://app.midtrans.com/snap/snap.js" data-client-key="{{ config('services.midtrans.client_key') }}">
+    <script src="https://app.sandbox.midtrans.com/snap/snap.js" data-client-key="{{ config('services.midtrans.client_key') }}">
     </script>
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 @endpush
@@ -28,16 +28,6 @@
                                     window.location.href = '{{ route("user.register-success", $participant) }}'
                                 });
                             </script>
-                        @elseif ($payment->status === 'expired')
-                            <div class="p-4 mb-4 text-orange-700 bg-red-100 rounded-lg">
-                                Pembayaran telah <strong>kedaluwarsa</strong> silahkan melakukan pendaftaran ulang.
-                            </div>
-                        @elseif ($paidLeft <= 0)
-                            <div class="p-4 mb-4 text-orange-700 bg-red-100 rounded-lg">
-                                Mohon maaf, kuota untuk jalur <strong>dengan jersey</strong> sudah penuh! Silahkan
-                                mendaftar
-                                jalur tanpa jersey.
-                            </div>
                         @else
                             <button id="pay-button" type="button"
                                 class="px-4 py-2 mb-4 bg-blue-500 text-white rounded w-full block">Bayar
@@ -86,7 +76,7 @@
             snap.pay("{{ $payment->midtrans_snap_token }}", {
                 onSuccess: function(result) {
                     console.log(result);
-                    window.location.reload(); // Redirect ke halaman sukses
+                    window.location.href = "/register-success/{{ $participant->id }}"; // Redirect ke halaman sukses
                 },
                 onPending: function(result) {
                     console.log(result);

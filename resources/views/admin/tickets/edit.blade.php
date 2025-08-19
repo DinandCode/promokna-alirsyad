@@ -37,23 +37,44 @@
                             required>
                     </div>
 
-                    {{-- Price (sementara dihapus) --}}
-                    {{--
+                    {{-- Tipe --}}
+                    <div class="mb-4">
+                        <label for="type_match" class="block text-sm font-medium text-gray-700">Tipe (sesuaikan dengan inputan data login)</label>
+                        <input type="text" id="type_match" name="type_match" value="{{ old('type_match', $ticket->type_match) }}" required
+                            class="mt-1 block w-full p-2 border-gray-300 rounded-md shadow-sm focus:border-blue-500 focus:ring-blue-500 sm:text-sm">
+                    </div>
+
+                    {{-- Price --}}
                     <div class="mb-4">
                         <label for="price" class="block text-sm font-medium text-gray-700">Price (Rp)</label>
                         <input type="number" id="price" name="price" value="{{ old('price', $ticket->price) }}"
                             class="mt-1 block w-full p-2 border-gray-300 rounded-md shadow-sm focus:border-blue-500 focus:ring-blue-500 sm:text-sm"
                             min="1" required>
                     </div>
-                    --}}
-
+                   
                     {{-- Quota --}}
-                    <div class="mb-4">
+                    {{-- <div class="mb-4">
                         <label for="quota" class="block text-sm font-medium text-gray-700">Quota (optional)</label>
                         <input type="number" id="quota" name="quota" value="{{ old('quota', $ticket->quota) }}"
                             class="mt-1 block w-full p-2 border-gray-300 rounded-md shadow-sm focus:border-blue-500 focus:ring-blue-500 sm:text-sm"
                             min="1" placeholder="Kosongkan untuk tiket tak terbatas">
                         <p class="text-sm text-gray-500 mt-1">Jika kosong maka kuota akan tak terbatas, jika isi pastikan lebih dari 0</p>
+                    </div> --}}
+
+                    {{-- Max Tries --}}
+                    <div class="mb-4">
+                        <label for="max_tries" class="block text-sm font-medium text-gray-700">Maksimal Pengisian (opsional)</label>
+                        <input type="number" id="max_tries" name="max_tries" value="{{ old('max_tries', $ticket->max_tries) }}"
+                            class="mt-1 block w-full p-2 border-gray-300 rounded-md shadow-sm focus:border-blue-500 focus:ring-blue-500 sm:text-sm"
+                            min="1" placeholder="Kosongkan untuk pengisian tak terbatas">
+                        <p class="text-sm text-gray-500 mt-1">Jika kosong maka maksimal pengisian tidak terbatas per akun, jika isi pastikan lebih dari 0</p>
+                    </div>
+
+                    {{-- Bib Prefix --}}
+                    <div class="mb-4">
+                        <label for="bib_prefix" class="block text-sm font-medium text-gray-700">Custom BIB Prefix (opsional)</label>
+                        <input type="text" id="bib_prefix" name="bib_prefix" value="{{ old('bib_prefix', $ticket->bib_prefix) }}"
+                            class="mt-1 block w-full p-2 border-gray-300 rounded-md shadow-sm focus:border-blue-500 focus:ring-blue-500 sm:text-sm">
                     </div>
 
                     {{-- Actions --}}
