@@ -28,7 +28,7 @@
         </div>
 
         <!-- Mobile Menu -->
-        <div id="mobileMenu" class="md:hidden bg-black bg-opacity-90 text-white px-6 py-4 hidden">
+        <div id="mobileMenu" class="md:hidden bg-green-800 bg-opacity-90 text-white px-6 py-4 hidden">
             <a href="{{ route('home.index') }}" class="block py-2 border-b border-gray-700">Beranda</a>
             <a href="{{ route('user.peserta') }}" class="block py-2 border-b border-gray-700">List Peserta</a>
             <a href="{{ route('home.faq') }}" class="block py-2 border-b border-gray-700">FAQ</a>
@@ -38,7 +38,7 @@
         </div>
     </header>
     @yield('navbar_content')
-    <footer class="bg-red-800 py-12 px-4" style="background-image : url('/asset/wickedbackground (4).svg')">
+    <footer class="bg-red-800 py-12 px-4 bg-cover" style="background-image : url('/asset/Rect Light.svg')">
         <div class="max-w-6xl mx-auto grid md:grid-cols-2 gap-10 text-white">
             <!-- Bagian Kiri: Info Kontak -->
             <div>
@@ -70,7 +70,7 @@
 
                 <!-- Email -->
                 <div class="flex items-start space-x-4 mb-4">
-                    <div class="bg-red-600 text-white p-3 rounded flex items-center justify-center w-10 h-10">
+                    <div class="bg-[#f08a16] text-white p-3 rounded flex items-center justify-center w-10 h-10">
                         <i class="fas fa-envelope text-white text-lg"></i>
                     </div>
                     <div>
@@ -113,7 +113,7 @@
                     <input type="text" name="subject" placeholder="Subject" class="w-full p-2 border rounded" required>
                     <textarea rows="4" name="message" placeholder="Message" class="w-full p-2 border rounded" required></textarea>
                     <button type="submit"
-                        class="bg-red-600 hover:bg-red-700 text-white py-2 px-6 rounded font-semibold">SEND
+                        class="bg-[#f08a16] hover:bg-yellow-500 text-white py-2 px-6 rounded font-semibold">SEND
                         MESSAGE</button>
                 </form>
             </div>
@@ -136,7 +136,7 @@
                 rights reserved.</div>
             <div class="text-gray-300">
                 Developed by <a href="https://promokna.id" target="_blank"
-                    class="text-red-600 hover:underline">promokna.id</a>
+                    class="text-[#f08a16] hover:underline">promokna.id</a>
             </div>
         </div>
 

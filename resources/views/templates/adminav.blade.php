@@ -8,7 +8,7 @@
 
     <div class="flex min-h-screen font-sans">
         <aside
-            class="relative w-64 bg-gradient-to-br from-red-700 min-h-screen shadow-md to-black p-6 flex flex-col overflow-hidden backdrop-blur-md">
+            class="relative w-64 bg-gradient-to-r from-[#0f5132] via-[#198754] min-h-screen shadow-md to-green-800 p-6 flex flex-col overflow-hidden backdrop-blur-md">
 
             <div class="absolute inset-0 z-0 opacity-20 pointer-events-none"></div>
 
@@ -82,7 +82,7 @@
         </aside>
 
         <div class="flex-1 flex flex-col">
-            <header class="flex justify-end items-center bg-black text-white p-4 shadow-md">
+            <header class="flex justify-end items-center bg-gradient-to-r from-[#0f5132] via-green-700 to-green-600 text-white p-4 shadow-md">
                 @auth
                     <div class="flex items-center gap-3 relative" x-data="{ open: false }">
                         <p class="font-semibold">{{ Auth::user()->first_name }}</p>
