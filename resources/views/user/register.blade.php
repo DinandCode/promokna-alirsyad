@@ -11,7 +11,7 @@
         <div class="bg-white mt-14 shadow-lg rounded-2xl p-8 w-full max-w-3xl z-10">
             <h2 class="text-2xl font-bold text-center text-gray-700 mb-2">Pendaftaran
                 {{ \App\Models\Setting::get(\App\Models\Setting::KEY_EVENT_NAME) }}</h2>
-            <h3 class="text-xl text-center text-red-800 font-semibold mb-6">Kategori: {{ $ticket->name }}</h3>
+            <h3 class="text-xl text-center text-green-700 font-semibold mb-6">Kategori: {{ $ticket->name }}</h3>
 
             @if ($registrationStatus == 'open')
                 @if ($freeLeft <= 0)
@@ -74,7 +74,7 @@
                             <template x-for="(label, index) in ['Data Umum', 'Biodata', 'Data Kesehatan']"
                                 :key="index">
                                 <button @click="step = index + 1" class="flex px-3 py-2 rounded-lg w-full"
-                                    :class="step === index + 1 ? 'bg-red-500 text-white' : 'bg-gray-200 text-gray-700'">
+                                    :class="step === index + 1 ? 'bg-green-600 text-white' : 'bg-gray-200 text-gray-700'">
                                     <span class="font-medium" x-text="label"></span>
                                 </button>
                             </template>
@@ -112,7 +112,7 @@
                                 </script>
                             @endif
 
-                            <div class="p-4 mb-4 bg-red-200 rounded-lg">
+                            <div class="p-4 mb-4 bg-green-200 rounded-lg">
                                 <ul class="list-disc pl-8">
                                     <li>Isi data diri anda dengan benar</li>
                                     <li>Gunakan alamat email yang aktif, informasi pendaftaran dan pembayaran akan
