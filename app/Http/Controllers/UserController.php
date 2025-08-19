@@ -261,43 +261,50 @@ class UserController extends Controller
         return view('home.peserta', compact('participants', 'query'));
     }
 
-    public function printBIB($bib)
-    {
-        $participant = DB::table('participants')->where('bib', $bib)->first();
+   public function printBIB($bib)
+{
+    $participant = DB::table('participants')->where('bib', $bib)->first();
 
-        $widthMm = 300;
-        $heightMm = 140;
+    // Ambil ukuran asli gambar
+    $templatePath = public_path('images/BIB MUSLIM FUN RUN.png'); // pastikan pakai .png atau sesuai ekstensi
 
-        $pdf = new TCPDF('L', 'mm', [$widthMm, $heightMm], true, 'UTF-8', false);
-        $pdf->SetMargins(0, 0, 0);
-        $pdf->SetAutoPageBreak(false, 0);
-        $pdf->AddPage();
+    list($widthPx, $heightPx) = getimagesize($templatePath);
+    $dpi = 300; // resolusi cetak
+    $widthMm = ($widthPx / $dpi) * 25.4;  // px → mm
+    $heightMm = ($heightPx / $dpi) * 25.4;
 
-        // Background image
-        $templatePath = resource_path('images/bib-polos-ump.png');
-        $pdf->Image($templatePath, 0, 0, $widthMm, $heightMm, '', '', '', false, 300, '', false, false, 0);
+    // Buat PDF dengan ukuran sesuai gambar
+    $pdf = new TCPDF('L', 'mm', [$widthMm, $heightMm], true, 'UTF-8', false);
+    $pdf->SetMargins(0, 0, 0);
+    $pdf->SetAutoPageBreak(false, 0);
+    $pdf->AddPage();
 
-        // Set text color and font
-        $pdf->SetTextColor(0, 0, 0);
+    // Background image fit penuh
+    $pdf->Image($templatePath, 0, 0, $widthMm, $heightMm, '', '', '', false, 300, '', false, false, 0);
 
-        $yOffset = 15;
+    // Warna teks
+    $pdf->SetTextColor(0, 0, 0);
 
-        // --- Full Name ---
-        $pdf->SetFont('helvetica', '', 18); // Smaller font
-        $pdf->SetXY(0, $yOffset + 25); // adjust Y
-        $pdf->Cell($widthMm, 10, ucwords($participant->full_name), 0, 1, 'C');
+    // Offset margin atas biar lebih rapi
+    $yOffset = 20;
 
-        // --- BIB Number ---
-        $pdf->SetFont('helvetica', 'B', 80); // Large bold font
-        $pdf->SetXY(0, $yOffset + 35); // Y position can be adjusted
-        $pdf->Cell($widthMm, 10, str_pad($participant->bib, 4, "0", STR_PAD_LEFT), 0, 1, 'C');
+    // --- Full Name ---
+    $pdf->SetFont('helvetica', '', 18);
+    $pdf->SetXY(0, $yOffset + 10); 
+    $pdf->Cell($widthMm, 10, ucwords($participant->full_name), 0, 1, 'C');
 
-        // --- BIB Name ---
-        $pdf->SetFont('helvetica', '', 40); // Medium font
-        $pdf->SetXY(0, $yOffset + 70); // adjust Y
-        $pdf->Cell($widthMm, 10, strtoupper($participant->bib_name), 0, 1, 'C');
+    // --- BIB Number ---
+    $pdf->SetFont('helvetica', 'B', 80);
+    $pdf->SetXY(0, $yOffset + 30); 
+    $pdf->Cell($widthMm, 20, str_pad($participant->bib, 4, "0", STR_PAD_LEFT), 0, 1, 'C');
 
-        // Output
-        $pdf->Output('BIB_' . $participant->bib . '.pdf', 'I');
-    }
+    // --- BIB Name ---
+    $pdf->SetFont('helvetica', '', 40);
+    $pdf->SetXY(0, $yOffset + 70); 
+    $pdf->Cell($widthMm, 20, strtoupper($participant->bib_name), 0, 1, 'C');
+
+    // Output
+    $pdf->Output('BIB_' . $participant->bib . '.pdf', 'I');
+}
+
 }
