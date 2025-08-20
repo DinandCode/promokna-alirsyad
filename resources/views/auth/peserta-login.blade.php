@@ -19,14 +19,14 @@
             @csrf
 
             <div class="mb-4">
-                <label for="nama" class="block font-medium">Nama Lengkap</label>
+                <label for="nama" class="block font-medium">NIP/NIS</label>
                 <input type="text" id="nama" name="nama" required
                     value="{{ old('nama') }}"
                     class="w-full mt-1 px-4 py-2 border rounded-lg focus:ring-2 focus:ring-red-500">
             </div>
 
             <div class="mb-4">
-                <label for="nis" class="block font-medium">NIS</label>
+                <label for="nis" class="block font-medium">Password</label>
                 <input type="password" id="nis" name="nis" required
                     class="w-full mt-1 px-4 py-2 border rounded-lg focus:ring-2 focus:ring-red-500">
             </div>
