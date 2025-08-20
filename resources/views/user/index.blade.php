@@ -21,7 +21,7 @@
 
         <!-- Judul -->
         <h2 class="text-2xl md:text-3xl font-bold text-white mb-6 text-center">
-            Pilih Kategori Rute
+            Pilih Kategori 
         </h2>
 
         <!-- Grid Card Responsif -->
@@ -41,7 +41,7 @@
 
                     <!-- Nama Kategori -->
                     <h3 class="text-lg md:text-xl font-bold">{{ $item->name }}</h3>
-                    <p class="text-sm opacity-80">Kategori Lari</p>
+                    <p class="text-sm opacity-80">Kategori</p>
                 </a>
             @endforeach
         </div>
@@ -66,7 +66,7 @@
         <div class="w-full md:w-1/2 space-y-6 text-center md:text-left">
             
            <!-- Judul -->
-<h1 class="text-3xl sm:text-5xl lg:text-6xl font-extrabold leading-tight text-green-800 drop-shadow-lg stroke-text">
+<h1 data-aos="fade-left" class="text-3xl sm:text-5xl lg:text-6xl font-extrabold leading-tight text-green-800 drop-shadow-lg stroke-text">
     {{ \App\Models\Setting::get(\App\Models\Setting::KEY_EVENT_NAME) }}
 </h1>
 
@@ -79,7 +79,7 @@
 
 
             <!-- Deskripsi -->
-            <p class="text-base sm:text-lg lg:text-xl text-gray-100 leading-relaxed max-w-lg mx-auto md:mx-0">
+            <p data-aos="fade-left" class="text-base sm:text-lg lg:text-xl text-gray-100 leading-relaxed max-w-lg mx-auto md:mx-0">
                 {{ \App\Models\Setting::get(\App\Models\Setting::KEY_EVENT_DESCRIPTION) }}
             </p>
 
@@ -98,12 +98,12 @@
 
             <!-- Tombol -->
             <div class="flex flex-col sm:flex-row justify-center md:justify-start gap-4 pt-4">
-                <a href="#eventDescription"
+                <a  data-aos="fade-left" href="#eventDescription"
                     class="px-6 py-3 rounded-full bg-white text-green-800 font-bold shadow-md hover:bg-green-600 hover:text-white transition">
                     Info Event
                 </a>
                 <button @click="openModal = true"
-                    class="px-6 py-3 rounded-full bg-white text-green-800 font-bold shadow-md hover:bg-green-600 hover:text-white transition">
+                    class="px-6 py-3 rounded-full bg-white text-green-800 font-bold shadow-md hover:bg-green-600 hover:text-white transition" data-aos="fade-right">
                     Daftar Event
                 </button>
             </div>
