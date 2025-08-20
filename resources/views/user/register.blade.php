@@ -29,7 +29,7 @@
                             email: '{{ old('email') }}',
                             phone: '{{ old('phone') }}',
                             community: '{{ old('community') }}',
-                            gender: '{{ old('gender') }}',
+                            gender: 'male',
                             {{-- nik: '{{ old('nik') }}', --}}
                             birthplace: '{{ old('birthplace') }}',
                             birthdate: '{{ old('birthdate') }}',
@@ -170,12 +170,12 @@
                             <div x-show="step === 2" class="space-y-4">
                                 <div>
                                     <label for="gender">Jenis Kelamin <span class="text-red-700">*</span></label>
-                                    <select id="gender" name="gender" x-model="form.gender"
-                                        class="w-full p-2 border rounded @error('gender') border-red-500 @enderror">
-                                        <option value="">Pilih Jenis Kelamin</option>
+                                    <select id="gender" name="gender" x-model="form.gender" readonly
+                                        class="w-full p-2 border read-only:cursor-not-allowed read-only:bg-gray-300 rounded @error('gender') border-red-500 @enderror">
                                         <option value="male">Laki-laki</option>
                                         <option value="female">Perempuan</option>
                                     </select>
+                                    <span class="text-red-700">Event ini khusus untuk ikhwan</span>
                                     @error('gender')
                                         <p class="text-red-500 text-sm mt-1">{{ $message }}</p>
                                     @enderror
@@ -217,6 +217,43 @@
                                     <input type="text" id="city" name="city" x-model="form.city"
                                         class="w-full p-2 border rounded @error('city') border-red-500 @enderror">
                                     @error('city')
+                                        <p class="text-red-500 text-sm mt-1">{{ $message }}</p>
+                                    @enderror
+                                </div>
+                                <div>
+                                    <label for="jersey_size">Ukuran Jersey <span class="text-red-700">*</span></label>
+                                    @if (\App\Models\Setting::get(\App\Models\Setting::KEY_EVENT_BENEFITS_URL))
+                                        <img src="{{ \App\Models\Setting::get(\App\Models\Setting::KEY_EVENT_BENEFITS_URL) }}"
+                                            class="w-full object-cover rounded shadow">
+                                    @endif
+                                    <select id="jersey_size" name="jersey_size" x-model="form.jersey_size"
+                                        class="w-full p-2 border rounded @error('jersey_size') border-red-500 @enderror">
+
+                                        <optgroup label="Dewasa">
+                                            <option value="dewasa_xs">Dewasa XS (48 x 66 cm)</option>
+                                            <option value="dewasa_s">Dewasa S (50 x 68 cm)</option>
+                                            <option value="dewasa_m">Dewasa M (52 x 70 cm)</option>
+                                            <option value="dewasa_l">Dewasa L (54 x 72 cm)</option>
+                                            <option value="dewasa_xl">Dewasa XL (57 x 74 cm)</option>
+                                            <option value="dewasa_2xl">Dewasa 2XL (60 x 76 cm)</option>
+                                            <option value="dewasa_3xl">Dewasa 3XL (63 x 78 cm)</option>
+                                        </optgroup>
+
+                                        <optgroup label="Anak">
+                                            <option value="anak_2th">Anak 2 Th (26 x 38 cm)</option>
+                                            <option value="anak_4th">Anak 4 Th (30 x 42 cm)</option>
+                                            <option value="anak_6th">Anak 6 Th (33 x 44 cm)</option>
+                                            <option value="anak_8th">Anak 8 Th (36 x 50 cm)</option>
+                                            <option value="anak_10th">Anak 10 Th (40 x 56 cm)</option>
+                                            <option value="anak_12th">Anak 12 Th (44 x 62 cm)</option>
+                                        </optgroup>
+
+                                    </select>
+                                    @error('jersey_size')
+                                        <p class="text-red-500 text-sm mt-1">{{ $message }}</p>
+                                    @enderror
+
+                                    @error('jersey_size')
                                         <p class="text-red-500 text-sm mt-1">{{ $message }}</p>
                                     @enderror
                                 </div>

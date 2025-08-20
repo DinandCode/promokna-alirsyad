@@ -34,8 +34,8 @@
                                     BIB Prefix</th>
                                 <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
                                     Tipe</th>
-                                {{-- <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                                    Kuota</th> --}}
+                                <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                    Kuota</th>
                                 <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
                                     Aksi</th>
                             </tr>
@@ -50,6 +50,7 @@
                                     <td class="px-6 py-4 whitespace-nowrap">{{ $ticket->max_tries ?? 'Tak Terbatas' }}</td>
                                     <td class="px-6 py-4 whitespace-nowrap">{{ $ticket->bib_prefix ?? 'Bawaan' }}</td>
                                     <td class="px-6 py-4 whitespace-nowrap">{{ $ticket->type_match }}</td>
+                                    <td class="px-6 py-4 whitespace-nowrap">{{ $ticket->quota ?? 'Tak terbatas' }}</td>
                                     <td class="px-6 py-4 whitespace-nowrap">
                                         <a href="{{ route('admin.tickets.edit', $ticket->id) }}"
                                             class="px-3 py-1 bg-yellow-400 text-white rounded-md text-sm hover:bg-yellow-500">Edit</a>

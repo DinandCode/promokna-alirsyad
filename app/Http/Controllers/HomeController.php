@@ -49,9 +49,16 @@ class HomeController extends Controller
         $ticket = Ticket::find($ticketId);
         $registrationStatus = Setting::get(Setting::KEY_REGISTRATION_STATUS);
 
-        $freeTotal = Participant::doesntHave('payment')->where('ticket_id', $ticketId)->count();
+        $total = Participant::doesntHave('payment')->where('ticket_id', $ticketId)->count();
         $quota = $ticket->quota;
-        $freeLeft = intval($quota) - intval($freeTotal);
+
+        if ($ticket->price != null) {
+            $total = Participant::whereHas('payment', function ($query) {
+                $query->where('status', 'paid');
+            })->where('ticket_id', $ticket->id)->count();
+        }
+
+        $freeLeft = intval($quota) - intval($total);
 
         if ($ticket->type_match != $user->type) {
             Auth::logout();

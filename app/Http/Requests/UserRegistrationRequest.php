@@ -23,7 +23,7 @@ class UserRegistrationRequest extends FormRequest
     {
         return [
             // Informasi Umum
-            'bib_name' => 'required|string|max:255',
+            'bib_name' => 'required|string|max:8',
             'full_name' => 'required|string|max:255',
             'email' => 'required|email|unique:participants,email',
             'phone' => 'required|string|max:20',
@@ -36,7 +36,7 @@ class UserRegistrationRequest extends FormRequest
             'birthdate' => 'required|date|before_or_equal:' . now()->subYears(13)->toDateString(),
             'address' => 'required|string|max:255',
             'city' => 'required|string|max:255',
-            'jersey_size' => 'nullable|in:XXS,XS,S,M,L,XL,2XL,3XL,4XL,5XL,6XL',
+            'jersey_size' => 'nullable',
 
             // Informasi Kesehatan
             'blood_type' => 'required|string|max:3',

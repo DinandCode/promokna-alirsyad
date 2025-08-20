@@ -22,7 +22,11 @@
                     <td class="px-4 py-2">{{ $participant->ticket->name }}</td>
                 </tr>
                 <tr class="border-b">
-                <td class="px-4 py-2 font-medium bg-gray-100">Nama Lengkap</td>
+                    <td class="px-4 py-2 font-medium bg-gray-100">Ukuran Jersey</td>
+                    <td class="px-4 py-2">{{ $participant->jersey_size }}</td>
+                </tr>
+                <tr class="border-b">
+                    <td class="px-4 py-2 font-medium bg-gray-100">Nama Lengkap</td>
                     <td class="px-4 py-2">{{ $participant->full_name }}</td>
                 </tr>
                 <tr class="border-b">
@@ -85,7 +89,7 @@
         @if ($mailNote != null || !empty($mailNote))
             <p class="mt-2">
                 <strong><u>NOTE:</u></strong>
-                <p>{!! $mailNote !!}</p>
+            <p>{!! $mailNote !!}</p>
             </p>
         @endif
 
