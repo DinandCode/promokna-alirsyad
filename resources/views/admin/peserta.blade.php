@@ -183,17 +183,24 @@
                     <select id="jersey_size" name="jersey_size" x-model="form.jersey_size"
                         class="w-full p-2 border rounded">
                         <option value="">Select Jersey Size</option>
-                        <option value="XXS">XXS</option>
-                        <option value="XS">XS</option>
-                        <option value="S">S</option>
-                        <option value="M">M</option>
-                        <option value="L">L</option>
-                        <option value="XL">XL</option>
-                        <option value="2XL">2XL</option>
-                        <option value="3XL">3XL</option>
-                        <option value="4XL">4XL</option>
-                        <option value="5XL">5XL</option>
-                        <option value="6XL">6XL</option>
+                        <optgroup label="Dewasa">
+                            <option value="dewasa_xs">Dewasa XS (L 48 x P 66 cm)</option>
+                            <option value="dewasa_s">Dewasa S (L 50 x P 68 cm)</option>
+                            <option value="dewasa_m">Dewasa M (L 52 x P 70 cm)</option>
+                            <option value="dewasa_l">Dewasa L (L 54 x P 72 cm)</option>
+                            <option value="dewasa_xl">Dewasa XL (L 57 x P 74 cm)</option>
+                            <option value="dewasa_2xl">Dewasa 2XL (L 60 x P 76 cm)</option>
+                            <option value="dewasa_3xl">Dewasa 3XL (L 63 x P 78 cm)</option>
+                        </optgroup>
+
+                        <optgroup label="Anak">
+                            <option value="anak_2th">Anak 2 th (L 26 x P 38 cm)</option>
+                            <option value="anak_4th">Anak 4 th (L 30 x P 42 cm)</option>
+                            <option value="anak_6th">Anak 6 th (L 33 x P 44 cm)</option>
+                            <option value="anak_8th">Anak 8 th (L 36 x P 50 cm)</option>
+                            <option value="anak_10th">Anak 10 th (L 40 x P 56 cm)</option>
+                            <option value="anak_12th">Anak 12 th (L 44 x P 62 cm)</option>
+                        </optgroup>
                     </select>
                 </div>
                 <div>
