@@ -3,7 +3,7 @@
 @section('title', config('app.name') . ' | Pembayaran Pendaftaran')
 
 @push('head')
-    <script src="https://app.sandbox.midtrans.com/snap/snap.js" data-client-key="{{ config('services.midtrans.client_key') }}">
+    <script src="https://app.midtrans.com/snap/snap.js" data-client-key="{{ config('services.midtrans.client_key') }}">
     </script>
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 @endpush
