@@ -223,7 +223,7 @@
                                 <div>
                                     <label for="jersey_size">Ukuran Jersey <span class="text-red-700">*</span></label>
                                     @if (\App\Models\Setting::get(\App\Models\Setting::KEY_EVENT_BENEFITS_URL))
-                                        <img src="{{ \App\Models\Setting::get(\App\Models\Setting::KEY_EVENT_BENEFITS_URL) }}"
+                                        <img src="{{ asset('asset/SIZE CHART JERSEY.png') }}"
                                             class="w-full object-cover rounded shadow">
                                     @endif
                                     <select id="jersey_size" name="jersey_size" x-model="form.jersey_size"
