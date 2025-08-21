@@ -134,11 +134,13 @@
                                 </div>
                                 <div>
                                     <label for="bib_name">Nama Dada / BIB <span class="text-red-700">*</span></label>
-                                    <input type="text" id="bib_name" name="bib_name" x-model="form.bib_name" placeholder="Maksimal 8 karakter"
+                                    <input type="text" id="bib_name" name="bib_name" x-model="form.bib_name" placeholder="8 karakter"
                                         class="w-full p-2 border rounded @error('bib_name') border-red-500 @enderror">
                                     @error('bib_name')
                                         <p class="text-red-500 text-sm mt-1">{{ $message }}</p>
                                     @enderror
+                                                                        <span class="text-red-700">Maksimal 8 Karakter</span>
+
                                 </div>
                                 <div>
                                     <label for="email">Email <span class="text-red-700">*</span></label>
