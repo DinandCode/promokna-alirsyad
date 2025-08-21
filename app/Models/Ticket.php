@@ -15,4 +15,8 @@ class Ticket extends Model
         'type_match',
         'last_bib'
     ];
+
+    public function participants() {
+        return $this->hasMany(Participant::class);
+    }
 }

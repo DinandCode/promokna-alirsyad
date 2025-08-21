@@ -8,6 +8,7 @@ use App\Http\Controllers\AuthController;
 use App\Http\Controllers\TicketController;
 use App\Http\Controllers\UserController;
 use App\Http\Middleware\EnsureUserIsAdmin;
+use App\Http\Middleware\EnsureUserIsOperator;
 use App\Mail\ParticipantConfirmationMail;
 use App\Models\MailLog;
 use App\Models\Participant;
@@ -33,9 +34,9 @@ Route::get('/preview-bib', [HomeController::class, 'previewBib'])->name('home.pr
 Route::get('/api/preview-bib', [AdminController::class, 'cookieGetFotoBIBValue']);
 
 Route::middleware('auth')->group(function () {
-    Route::get('/dashboard', [AdminController::class, 'index'])->name('admin.index');
+    Route::get('/dashboard', [AdminController::class, 'index'])->name('admin.index')->middleware(EnsureUserIsOperator::class);
 
-    Route::get('/admin', [AdminController::class, 'peserta'])->name('admin.peserta');
+    Route::get('/admin', [AdminController::class, 'peserta'])->name('admin.peserta')->middleware(EnsureUserIsOperator::class);
 
     Route::get('/registration/{ticket:id}', [HomeController::class, 'registerTicket'])->name('user.register-ticket');
     Route::post('/registration', [UserController::class, 'attemptRegisterTicket'])->name('user.attempt-register-ticket');
@@ -58,8 +59,8 @@ Route::middleware('auth')->group(function () {
 
     Route::resource('/admin/tiket', TicketController::class)->middleware(EnsureUserIsAdmin::class)->names('admin.tickets');
 
-    Route::get('/admin/fotobib', [AdminController::class, 'showFotoBibForm'])->name('admin.fotobib.show');
-    Route::post('/admin/fotobib', [AdminController::class, 'handleFotoBibForm'])->name('admin.fotobib.submit');
+    Route::get('/admin/fotobib', [AdminController::class, 'showFotoBibForm'])->name('admin.fotobib.show')->middleware(EnsureUserIsOperator::class);
+    Route::post('/admin/fotobib', [AdminController::class, 'handleFotoBibForm'])->name('admin.fotobib.submit')->middleware(EnsureUserIsOperator::class);
 });
 
 Route::get('/masuk', [AdminController::class, 'login'])->name('login');

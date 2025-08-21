@@ -12,6 +12,7 @@ use Maatwebsite\Excel\Facades\Excel;
 use App\Exports\ParticipantsExport;
 use App\Models\MailLog;
 use App\Models\Message;
+use App\Models\Ticket;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Mail;
 
@@ -19,63 +20,75 @@ class AdminController extends Controller
 {
     public function index()
     {
-        $paidCount = Participant::whereHas('payment', function ($q) {
-            $q->where('status', 'paid');
-        })->count();
+        // --- 1. Per-ticket participant statistics ---
+        $tickets = Ticket::withCount([
+            'participants as participants_count' => function ($query) {
+                $query->where(function ($q) {
+                    // Untuk tiket gratis: count semua participant
+                    $q->whereNull('tickets.price');
+                })->orWhere(function ($q) {
+                    // Untuk tiket berbayar: count hanya participant yang punya payment status = paid
+                    $q->whereNotNull('tickets.price')
+                        ->where('tickets.price', '>', 0)
+                        ->whereHas('payment', function ($paymentQuery) {
+                            $paymentQuery->where('status', 'paid');
+                        });
+                });
+            }
+        ])->get();
 
-        $freeCount = Participant::doesntHave('payment')->count();
-
-        $takenStats = [];
-        $takenStats['taken'] = Participant::where(function ($query) {
-            $query->whereHas('payment', function ($q) {
-                $q->where('status', 'paid');
-            })->orWhereDoesntHave('payment');
-        })->whereNotNull('taken_by')->count();
-
-        $takenStats['not_taken'] = Participant::where(function ($query) {
-            $query->whereHas('payment', function ($q) {
-                $q->where('status', 'paid');
-            })->orWhereDoesntHave('payment');
-        })->whereNull('taken_by')->count();
-
-        $freeStatsRaw = Participant::selectRaw("
-        CASE WHEN taken_by IS NULL THEN 'not_taken' ELSE 'taken' END as taken_status,
-        COUNT(*) as total
-    ")
-            ->whereDoesntHave('payment')
-            ->groupBy('taken_status')
-            ->get()
-            ->pluck('total', 'taken_status');
-
-        // Ensure both keys exist
-        $freeStats = [
-            'taken' => $freeStatsRaw->get('taken', 0),
-            'not_taken' => $freeStatsRaw->get('not_taken', 0),
+        // Data for chart.js
+        $ticketChart = [
+            'labels' => $tickets->pluck('name'),
+            'data'   => $tickets->pluck('participants_count'),
         ];
 
-        $paidStatsRaw = Participant::selectRaw("
-        CASE WHEN taken_by IS NULL THEN 'not_taken' ELSE 'taken' END as taken_status,
+        // --- Taken vs Not-taken grouped by ticket ---
+        $ticketStatsRaw = Participant::selectRaw("
+        tickets.name as ticket_name,
+        CASE WHEN participants.handled_by IS NULL THEN 'not_taken' ELSE 'taken' END as taken_status,
         COUNT(*) as total
     ")
-            ->whereHas('payment', function ($q) {
-                $q->where('status', 'paid');
+            ->join('tickets', 'tickets.id', '=', 'participants.ticket_id')
+            ->leftJoin('payments', 'payments.participant_id', '=', 'participants.id')
+            ->where(function ($q) {
+                // Tiket gratis
+                $q->whereNull('tickets.price');
             })
-            ->groupBy('taken_status')
-            ->get()
-            ->pluck('total', 'taken_status');
+            ->orWhere(function ($q) {
+                // Tiket berbayar, hanya yang sudah paid
+                $q->whereNotNull('tickets.price')
+                    ->where('tickets.price', '>', 0)
+                    ->where('payments.status', 'paid');
+            })
+            ->groupBy('tickets.id', 'tickets.name', 'taken_status')
+            ->orderBy('tickets.id')
+            ->get();
 
-        // Ensure both keys exist
-        $paidStats = [
-            'taken' => $paidStatsRaw->get('taken', 0),
-            'not_taken' => $paidStatsRaw->get('not_taken', 0),
+        // Transform into structure per ticket
+        $ticketStats = [];
+        foreach ($ticketStatsRaw as $row) {
+            $ticketStats[$row->ticket_name][$row->taken_status] = $row->total;
+        }
+
+        // Ensure both taken/not_taken keys exist for each ticket
+        foreach ($ticketStats as $ticketName => &$stats) {
+            $stats = [
+                'taken'     => $stats['taken'] ?? 0,
+                'not_taken' => $stats['not_taken'] ?? 0,
+            ];
+        }
+
+        // Prepare Chart.js ready structure
+        $finalStats = [
+            'labels'    => array_keys($ticketStats),
+            'taken'     => array_column($ticketStats, 'taken'),
+            'not_taken' => array_column($ticketStats, 'not_taken'),
         ];
 
         return view('admin.index', [
-            'paidCount' => $paidCount,
-            'freeCount' => $freeCount,
-            'takenStats' => $takenStats,
-            'freeStats' => $freeStats,
-            'paidStats' => $paidStats
+            'ticketChart'  => $ticketChart,
+            'handledChart' => $finalStats,
         ]);
     }
 
