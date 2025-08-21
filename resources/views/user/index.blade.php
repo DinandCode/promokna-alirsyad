@@ -216,7 +216,7 @@
                     <i class="fa fa-ticket-alt text-2xl"></i>
                 </div>
                 <h3 class="font-semibold text-xl mt-4">Tiket</h3>
-                <p class="text-lg font-bold tracking-wide mt-1">Mulai dari 0 Rupiah</p>
+                <p class="text-lg font-bold tracking-wide mt-1">Rp 175.000 </p>
             </div>
         </div>
 
@@ -241,27 +241,30 @@
 
 
 
-        <section class="p-8 grid md:grid-cols-2 gap-6 items-start overflow-x-hidden" id="eventDescription">
-            <!-- Kiri: Gambar dan Info -->
-            <div class="border-t-2 border-green-600 pt-4" data-aos="fade-right">
-                <img src="{{ \App\Models\Setting::get(\App\Models\Setting::KEY_WEBSITE_LOGO_URL) }}" alt="Band"
-                    class="rounded mb-4 w-1/2 object-fit">
+       <section class="p-8 grid md:grid-cols-2 gap-6 items-start overflow-x-hidden" id="eventDescription">
+    <!-- Kiri: Gambar dan Info -->
+    <div class="border-t-2 border-green-600 pt-4" data-aos="fade-right">
+        <img src="{{ \App\Models\Setting::get(\App\Models\Setting::KEY_WEBSITE_LOGO_URL) }}" 
+             alt="Band"
+             class="w-full max-w-md lg:max-w-lg mx-auto rounded mb-4 object-contain">
 
-                <h2 class="text-xl font-bold mb-2">Deskripsi Event</h2>
-                <p class="text-sm text-gray-700">
-                    {!! \App\Models\Setting::get(\App\Models\Setting::KEY_EVENT_DESCRIPTION) !!}
-                </p>
-            </div>
+        <h2 class="text-xl font-bold mb-2">Deskripsi Event</h2>
+        <p class="text-sm text-gray-700">
+            {!! \App\Models\Setting::get(\App\Models\Setting::KEY_EVENT_DESCRIPTION) !!}
+        </p>
+    </div>
 
-            <!-- Kanan: 2 Gambar + Deskripsi -->
-            <div class="border-t border-black pt-4" data-aos="fade-left">
-                <div class="flex flex-col gap-4 mb-4">
-                    <h2 class="text-xl font-bold mb-2">Benefit Peserta</h2>
-                    <img src="{{ \App\Models\Setting::get(\App\Models\Setting::KEY_EVENT_BENEFITS_URL) }}" alt="Img 1"
-                        class="w-1/2 rounded">
-                </div>
-            </div>
-        </section>
+    <!-- Kanan: 2 Gambar + Deskripsi -->
+    <div class="border-t border-black pt-4" data-aos="fade-left">
+        <div class="flex flex-col gap-4 mb-4">
+            <h2 class="text-xl font-bold mb-2">Benefit Peserta</h2>
+            <img src="{{ \App\Models\Setting::get(\App\Models\Setting::KEY_EVENT_BENEFITS_URL) }}" 
+                 alt="Benefit Peserta"
+                 class="w-full max-w-xl mx-auto rounded object-contain">
+        </div>
+    </div>
+</section>
+
 
         <!-- Testimonial / Rute Opsional-->
         <section class="bg-cover bg-black bg-center py-10 text-white text-center" style="background-image : url('/asset/Rect Light.svg')">
