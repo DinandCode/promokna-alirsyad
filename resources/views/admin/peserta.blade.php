@@ -66,7 +66,7 @@
                     <div class="p-4 bg-gray-100 rounded-b-lg">
                         <p><strong>Nama BIB:</strong> <span x-text="item.bib_name"></span></p>
                         <p><strong>Nama Lengkap:</strong> <span x-text="item.full_name"></span></p>
-                        <p><strong>Ukuran Jersey:</strong> <span x-text="item.jersey_size"></span></p>
+                        <p><strong>Ukuran Jersey:</strong> <span x-text="item.jersey_size.toUpperCase()"></span></p>
                         <p><strong>Komunitas:</strong> <span x-text="item.community"></span></p>
                         <p><strong>Jenis Kelamin:</strong> <span x-text="item.gender"></span></p>
                         <p><strong>Email:</strong> <span x-text="item.email"></span></p>

@@ -63,7 +63,7 @@ class ParticipantsExport implements FromCollection, WithHeadings
                 'birthdate'      => $participant->birthdate,
                 'address'        => $participant->address,
                 'city'           => $participant->city,
-                'jersey_size'    => $participant->jersey_size,
+                'jersey_size'    => strtoupper($participant->jersey_size),
                 'blood_type'     => $participant->blood_type,
                 'medical_history' => $participant->medical_history,
                 'medical_note'   => $participant->medical_note,
