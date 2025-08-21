@@ -134,11 +134,13 @@
                                 </div>
                                 <div>
                                     <label for="bib_name">Nama Dada / BIB <span class="text-red-700">*</span></label>
-                                    <input type="text" id="bib_name" name="bib_name" x-model="form.bib_name"
+                                    <input type="text" id="bib_name" name="bib_name" x-model="form.bib_name" placeholder="8 karakter"
                                         class="w-full p-2 border rounded @error('bib_name') border-red-500 @enderror">
                                     @error('bib_name')
                                         <p class="text-red-500 text-sm mt-1">{{ $message }}</p>
                                     @enderror
+                                                                        <span class="text-red-700">Maksimal 8 Karakter</span>
+
                                 </div>
                                 <div>
                                     <label for="email">Email <span class="text-red-700">*</span></label>
@@ -175,7 +177,7 @@
                                         <option value="male">Laki-laki</option>
                                         <option value="female">Perempuan</option>
                                     </select>
-                                    <span class="text-red-700">Event ini khusus untuk ikhwan</span>
+                                    <span class="text-red-700">Event ini khusus untuk laki - laki</span>
                                     @error('gender')
                                         <p class="text-red-500 text-sm mt-1">{{ $message }}</p>
                                     @enderror
@@ -223,29 +225,29 @@
                                 <div>
                                     <label for="jersey_size">Ukuran Jersey <span class="text-red-700">*</span></label>
                                     @if (\App\Models\Setting::get(\App\Models\Setting::KEY_EVENT_BENEFITS_URL))
-                                        <img src="{{ \App\Models\Setting::get(\App\Models\Setting::KEY_EVENT_BENEFITS_URL) }}"
+                                        <img src="{{ asset('asset/SIZE CHART JERSEY.png') }}"
                                             class="w-full object-cover rounded shadow">
                                     @endif
                                     <select id="jersey_size" name="jersey_size" x-model="form.jersey_size"
                                         class="w-full p-2 border rounded @error('jersey_size') border-red-500 @enderror">
 
                                         <optgroup label="Dewasa">
-                                            <option value="dewasa_xs">Dewasa XS (48 x 66 cm)</option>
-                                            <option value="dewasa_s">Dewasa S (50 x 68 cm)</option>
-                                            <option value="dewasa_m">Dewasa M (52 x 70 cm)</option>
-                                            <option value="dewasa_l">Dewasa L (54 x 72 cm)</option>
-                                            <option value="dewasa_xl">Dewasa XL (57 x 74 cm)</option>
-                                            <option value="dewasa_2xl">Dewasa 2XL (60 x 76 cm)</option>
-                                            <option value="dewasa_3xl">Dewasa 3XL (63 x 78 cm)</option>
+                                            <option value="dewasa_xs">Dewasa XS (L 48 x P 66 cm)</option>
+                                            <option value="dewasa_s">Dewasa S (L 50 x P 68 cm)</option>
+                                            <option value="dewasa_m">Dewasa M (L 52 x P 70 cm)</option>
+                                            <option value="dewasa_l">Dewasa L (L 54 x P 72 cm)</option>
+                                            <option value="dewasa_xl">Dewasa XL (L 57 x P 74 cm)</option>
+                                            <option value="dewasa_2xl">Dewasa 2XL (L 60 x P 76 cm)</option>
+                                            <option value="dewasa_3xl">Dewasa 3XL (L 63 x P 78 cm)</option>
                                         </optgroup>
 
                                         <optgroup label="Anak">
-                                            <option value="anak_2th">Anak 2 Th (26 x 38 cm)</option>
-                                            <option value="anak_4th">Anak 4 Th (30 x 42 cm)</option>
-                                            <option value="anak_6th">Anak 6 Th (33 x 44 cm)</option>
-                                            <option value="anak_8th">Anak 8 Th (36 x 50 cm)</option>
-                                            <option value="anak_10th">Anak 10 Th (40 x 56 cm)</option>
-                                            <option value="anak_12th">Anak 12 Th (44 x 62 cm)</option>
+                                            <option value="anak_2th">Kid 1 (26 x 38 cm)</option>
+                                            <option value="anak_4th">Kid 2 (30 x 42 cm)</option>
+                                            <option value="anak_6th">Kid 3 (33 x 44 cm)</option>
+                                            <option value="anak_8th">Kid 4 (36 x 50 cm)</option>
+                                            <option value="anak_10th">Kid 5 ( L 40 x P 56 cm)</option>
+                                            <option value="anak_12th">Kid 6 (L 44 x P 62 cm)</option>
                                         </optgroup>
 
                                     </select>
