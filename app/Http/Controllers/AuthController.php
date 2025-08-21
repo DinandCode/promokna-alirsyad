@@ -46,7 +46,10 @@ class AuthController extends Controller
             ]);
         }
 
-        if ($user->participants->count() >= $ticket->max_tries) {
+        $totalTries = $user->participants()->whereHas('payment', function ($query) {
+                $query->where('status', 'paid');
+            })->where('ticket_id', $ticket->id)->count();
+        if ($totalTries >= $ticket->max_tries) {
             return back()->withErrors([
                 'login' => 'Anda sudah menggunakan jatah maksimal ' . $ticket->max_tries . ' untuk kategori ini.'
             ]);
