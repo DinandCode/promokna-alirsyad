@@ -48,7 +48,10 @@ Route::middleware('auth')->group(function () {
     Route::get('/report', [AdminController::class, 'laporan'])->name('admin.laporan')->middleware(EnsureUserIsAdmin::class);
     Route::get('/setting', [AdminController::class, 'pengaturan'])->name('admin.pengaturan')->middleware(EnsureUserIsAdmin::class);
 
-    Route::get('/pesan', [AdminController::class, 'pesan'])->name('admin.pesan')->middleware(EnsureUserIsAdmin::class);
+    Route::get('/pesan', [AdminController::class, 'pesan'])->name('admin.pesan')->middleware(EnsureUserIsOperator::class);
+
+    Route::post('/admin/pesan/{id}/reply', [AdminController::class, 'balasPesan'])
+        ->name('admin.pesan.reply');
 
     Route::post('/admin/settings/update', [MasterSettingController::class, 'update'])->name('admin.settings.update')->middleware(EnsureUserIsAdmin::class);
     Route::post('/admin/faqs/update', [MasterSettingController::class, 'updateFaq'])->name('admin.faqs.update')->middleware(EnsureUserIsAdmin::class);

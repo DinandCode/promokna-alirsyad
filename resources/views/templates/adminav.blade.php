@@ -55,7 +55,7 @@
                         </a>
                     @endcanany
 
-                    @canany(['is-admin', 'is-superadmin'])
+                    @canany(['is-admin', 'is-superadmin', 'is-operator'])
                         <a href="{{ route('admin.pesan') }}"
                             class="flex items-center gap-3 p-3 rounded-lg hover:bg-black hover:translate-x-1 transition-all">
                             <img width="30" height="30" src="https://img.icons8.com/3d-fluency/30/chat-message.png" alt="chat-message"/><span class="font-medium">Pesan</span>

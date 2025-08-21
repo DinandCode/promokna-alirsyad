@@ -213,6 +213,52 @@ class AdminController extends Controller
         return view('admin.messages', compact('messages'));
     }
 
+    public function balasPesan(Request $request, $id)
+    {
+        $message = Message::find($id);
+        if (!$message) abort(404);
+
+        $request->validate([
+            'subject' => 'required|string|max:255',
+            'content' => 'required|string',
+        ]);
+
+        $mailLog = null;
+        if ($message->replyLog) {
+            // simpan ke mail_logs
+            $mailLog = MailLog::find($message->replyLog->id);
+            $mailLog->status = 'sent';
+            $mailLog->subject = $request->subject;
+            $mailLog->content = $request->content;
+            $mailLog->save();
+        } else {
+            // simpan ke mail_logs
+            $mailLog = MailLog::create([
+                'to' => $message->email,
+                'subject' => $request->subject,
+                'content' => $request->content,
+                'status' => 'sent',
+                'reply_for' => $message->id,
+            ]);
+        }
+
+        try {
+            Mail::html($request->content, function ($mail) use ($request, $message) {
+                $mail->to($message->email)
+                    ->subject($request->subject);
+            });
+            $mailLog->update(['status' => 'sent']);
+        } catch (\Exception $e) {
+            $mailLog->update(['status' => 'failed']);
+            return response()->json(['error' => $e->getMessage()], 500);
+        }
+
+        return response()->json([
+            'success' => true,
+            'mail_log_id' => $mailLog->id,
+        ]);
+    }
+
     public function mailLogs(Request $request)
     {
         $search = $request->input('search');

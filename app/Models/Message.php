@@ -11,4 +11,9 @@ class Message extends Model
         'created_at',
         'updated_at'
     ];
+
+    public function replyLog()
+    {
+        return $this->hasOne(MailLog::class, 'reply_for');
+    }
 }
