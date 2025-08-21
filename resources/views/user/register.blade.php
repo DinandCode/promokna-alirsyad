@@ -242,12 +242,12 @@
                                         </optgroup>
 
                                         <optgroup label="Anak">
-                                            <option value="anak_2th">Kid 1 (26 x 38 cm)</option>
-                                            <option value="anak_4th">Kid 2 (30 x 42 cm)</option>
-                                            <option value="anak_6th">Kid 3 (33 x 44 cm)</option>
-                                            <option value="anak_8th">Kid 4 (36 x 50 cm)</option>
-                                            <option value="anak_10th">Kid 5 ( L 40 x P 56 cm)</option>
-                                            <option value="anak_12th">Kid 6 (L 44 x P 62 cm)</option>
+                                            <option value="anak_2th">Anak 2 th (L 26 x P 38 cm)</option>
+                                            <option value="anak_4th">Anak 4 th (L 30 x P 42 cm)</option>
+                                            <option value="anak_6th">Anak 6 th (L 33 x P 44 cm)</option>
+                                            <option value="anak_8th">Anak 8 th (L 36 x P 50 cm)</option>
+                                            <option value="anak_10th">Anak 10 th (L 40 x P 56 cm)</option>
+                                            <option value="anak_12th">Anak 12 th (L 44 x P 62 cm)</option>
                                         </optgroup>
 
                                     </select>
