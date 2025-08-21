@@ -36,7 +36,7 @@ class AuthController extends Controller
 
         if (!$user) {
             return back()->withErrors([
-                'login' => 'Nama atau NIS tidak cocok.',
+                'login' => 'NIB / NIP atau Password tidak cocok.',
             ])->withInput();
         }
 
