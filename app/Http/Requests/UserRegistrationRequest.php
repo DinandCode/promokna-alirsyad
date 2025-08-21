@@ -33,7 +33,7 @@ class UserRegistrationRequest extends FormRequest
             'gender' => 'required|in:female,male',
             // 'nik' => 'required|string|size:16|unique:participants,nik',
             'birthplace' => 'required|string|max:255',
-            'birthdate' => 'required|date|before_or_equal:' . now()->subYears(13)->toDateString(),
+            'birthdate' => 'required|date|before_or_equal:' . now()->subYears(9)->toDateString(),
             'address' => 'required|string|max:255',
             'city' => 'required|string|max:255',
             'jersey_size' => 'nullable',
@@ -70,7 +70,7 @@ class UserRegistrationRequest extends FormRequest
             'address.required' => 'Alamat harus diisi',
             'city.required' => 'Kota harus diisi',
             'blood_type.required' => 'Golongan darah harus diisi',
-            'birthdate.before_or_equal' => 'Usia minimal harus 13 tahun.'
+            'birthdate.before_or_equal' => 'Usia minimal harus 9 tahun.'
         ];
     }
 }
