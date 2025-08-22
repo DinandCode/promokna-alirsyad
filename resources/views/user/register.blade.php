@@ -172,11 +172,12 @@
                             <div x-show="step === 2" class="space-y-4">
                                 <div>
                                     <label for="gender">Jenis Kelamin <span class="text-red-700">*</span></label>
-                                    <select id="gender" name="gender" x-model="form.gender" readonly
+                                    <select id="gender" x-model="form.gender" disabled
                                         class="w-full p-2 border read-only:cursor-not-allowed read-only:bg-gray-300 rounded @error('gender') border-red-500 @enderror">
                                         <option value="male">Laki-laki</option>
                                         <option value="female">Perempuan</option>
                                     </select>
+                                    <input type="hidden" name="gender" value="male">
                                     <span class="text-red-700">Event ini khusus untuk laki - laki</span>
                                     @error('gender')
                                         <p class="text-red-500 text-sm mt-1">{{ $message }}</p>
