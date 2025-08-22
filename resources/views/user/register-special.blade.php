@@ -220,9 +220,10 @@
                                     <select id="city" name="city" x-model="form.city"
                                         class="w-full p-2 border rounded @error('city') border-red-500 @enderror">
                                         <option value="TK">TK</option>
-                                        <option value="SD">SD</option>
+                                        <option value="SD1">SD1</option>
+                                        <option value="SD2">SD2</option>
                                         <option value="SMP">SMP</option>
-                                        <option value="SMA">SMA</option>
+                                        <option value="SMAIT">SMAIT</option>
                                         <option value="SMP AABS">SMP AABS</option>
                                         <option value="SMA AABS">SMA AABS</option>
                                     </select>
