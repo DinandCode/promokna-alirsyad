@@ -9,8 +9,8 @@
 
 @section('navbar_admin')
 
-    <body class="bg-gray-100">
-        <div class="max-w-6xl mx-auto bg-white shadow-lg rounded-lg p-6">
+ <div class="bg-gray-100 min-h-screen">
+            <div class="max-w-6xl mx-auto bg-white shadow-lg rounded-lg p-6">
             <h1 class="text-xl font-bold mb-4">Pesan Masuk dari Pengguna</h1>
 
             {{-- Form pencarian --}}
@@ -136,7 +136,7 @@
             </div>
         </div>
 
-    </body>
+ </div>
 
 @endsection
 
