@@ -18,7 +18,7 @@ use Illuminate\Support\Facades\Route;
 
 Route::get('/', [HomeController::class, 'index'])->name('home.index');
 Route::get('/registration', [HomeController::class, 'register'])->name('user.register');
-Route::post('/registration', [UserController::class, 'attemptRegister'])->name('user.attempt-register');
+Route::post('/registration', [UserController::class, 'attemptRegisterTicketOpen'])->name('user.attempt-register');
 
 Route::get('/peserta', [UserController::class, 'listUser'])->name('user.peserta');
 Route::get('/peserta/{bib}/print-bib', [UserController::class, 'printBIB'])->name('user.print-bib');
@@ -39,7 +39,7 @@ Route::middleware('auth')->group(function () {
     Route::get('/admin', [AdminController::class, 'peserta'])->name('admin.peserta')->middleware(EnsureUserIsOperator::class);
 
     Route::get('/registration/{ticket:id}', [HomeController::class, 'registerTicket'])->name('user.register-ticket');
-    Route::post('/registration', [UserController::class, 'attemptRegisterTicket'])->name('user.attempt-register-ticket');
+    Route::post('/registration-ticket', [UserController::class, 'attemptRegisterTicket'])->name('user.attempt-register-ticket');
 
     Route::get('/register-success/{participant:id}', [UserController::class, 'registerSuccess'])->name('user.register-success');
     Route::get('/pay/{participant:id}/payment/{payment:id}', [PaymentController::class, 'pay'])->withoutScopedBindings()->name('payment.pay');

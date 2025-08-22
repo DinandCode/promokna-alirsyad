@@ -27,20 +27,24 @@ class HomeController extends Controller
 
     public function register()
     {
-        return redirect()->route('home.index');
-
+        $ticket = Ticket::where('type_match', 'alumni')->first();
+        if (!$ticket) abort(404);
         $registrationStatus = Setting::get(Setting::KEY_REGISTRATION_STATUS);
-        $paidTotal = Participant::whereHas('payment', function ($query) {
-            $query->whereNot('status', 'expired');
-        })->count();
-        $freeTotal = Participant::doesntHave('payment')->count();
 
-        Log::info("[Pre-Register] Paid user total: $paidTotal, free user total: $freeTotal");
+        $total = Participant::doesntHave('payment')->where('ticket_id', $ticket->id)->count();
+        $quota = $ticket->quota;
 
-        $paidLeft = intval(Setting::get(Setting::KEY_EVENT_PAID_MEMBER_LIMIT)) - intval($paidTotal);
-        $freeLeft = intval(Setting::get(Setting::KEY_EVENT_FREE_MEMBER_LIMIT)) - intval($freeTotal);
+        if ($ticket->price != null) {
+            $total = Participant::whereHas('payment', function ($query) {
+                $query->where('status', 'paid');
+            })->where('ticket_id', $ticket->id)->count();
+        }
 
-        return view('user.register', compact('registrationStatus', 'paidLeft', 'freeLeft'));
+        $freeLeft = intval($quota) - intval($total);
+
+        if ($quota == null) $freeLeft = 999999;
+
+        return view('user.register-special', compact('ticket', 'registrationStatus', 'freeLeft'));
     }
 
     public function registerTicket(Request $request, $ticketId)

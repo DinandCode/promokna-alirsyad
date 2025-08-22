@@ -38,7 +38,7 @@ class MasterParticipantController extends Controller
             }
         }
 
-        $participants = $query->orderBy('created_at', 'desc')->paginate(10);
+        $participants = $query->with('ticket')->orderBy('created_at', 'desc')->paginate(10);
 
         return response()->json($participants);
     }

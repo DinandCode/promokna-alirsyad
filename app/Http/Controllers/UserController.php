@@ -132,6 +132,60 @@ class UserController extends Controller
         return redirect()->route('user.register-success', ['participant' => $data['id'] ?? 1]);
     }
 
+    public function attemptRegisterTicketOpen(UserRegistrationRequest $request)
+    {
+        $validatedData = $request->validated();
+        $ticket = Ticket::find($validatedData['ticket_id']);
+
+        $total = Participant::doesntHave('payment')->where('ticket_id', $ticket->id)->count();
+
+        if ($ticket->price != null) {
+            $total = Participant::whereHas('payment', function ($query) {
+                $query->where('status', 'paid');
+            })->where('ticket_id', $ticket->id)->count();
+        }
+
+        $ticketLimit = $ticket->quota;
+
+        if ($ticketLimit != null && $total >= $ticketLimit) {
+            return back();
+        }
+
+        $registrationStatus = Setting::get(Setting::KEY_REGISTRATION_STATUS);
+        if ($registrationStatus != 'open') {
+            abort(403);
+        }
+
+        try {
+            return DB::transaction(function () use ($validatedData) {
+                $ticket = Ticket::find($validatedData['ticket_id']);
+                $lastBibNumber = $ticket->last_bib;
+
+                $validatedData['bib'] = ($ticket->bib_prefix ?? "80") . str_pad(strval($lastBibNumber + 1), 3, "0", STR_PAD_LEFT);
+                $validatedData['accept_promo'] = isset($validatedData['accept_promo']);
+
+                $participant = Participant::create($validatedData);
+
+                $ticket->last_bib = $lastBibNumber + 1;
+                $ticket->save();
+
+                if ($ticket->price && $ticket->price > 0) {
+                    $ids = $this->setupPaymentRecord($participant, $ticket->price);
+
+                    return redirect()->route('payment.pay', [
+                        'participant' => $ids[0],
+                        'payment' => $ids[1],
+                    ]);
+                }
+
+                Mail::to($participant->email)->send(new RegistrationSuccessMail($participant));
+                return $participant;
+            });
+        } catch (\Throwable $th) {
+            return redirect()->back()->withInput()->with('error', 'Terjadi kesalahan, harap coba beberapa saat lagi: ' . $th->getMessage());
+        }
+    }
+
     public function attemptRegisterTicket(UserRegistrationRequest $request)
     {
         $validatedData = $request->validated();
