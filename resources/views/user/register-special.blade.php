@@ -219,6 +219,7 @@
                                     <label for="city">Pendidikan Terakhir di Al Irsyad <span class="text-red-700">*</span></label>
                                     <select id="city" name="city" x-model="form.city"
                                         class="w-full p-2 border rounded @error('city') border-red-500 @enderror">
+                                        <option value="">-- Pilih pendidikan terakhir --</option>
                                         <option value="TK">TK</option>
                                         <option value="SD1">SD1</option>
                                         <option value="SD2">SD2</option>
@@ -239,7 +240,7 @@
                                     @endif
                                     <select id="jersey_size" name="jersey_size" x-model="form.jersey_size"
                                         class="w-full p-2 border rounded @error('jersey_size') border-red-500 @enderror">
-
+                                        <option value="">-- Ukuran Jersey --</option>
                                         <optgroup label="Dewasa">
                                             <option value="dewasa_xs">Dewasa XS (L 48 x P 66 cm)</option>
                                             <option value="dewasa_s">Dewasa S (L 50 x P 68 cm)</option>
