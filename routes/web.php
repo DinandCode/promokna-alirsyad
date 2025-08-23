@@ -34,6 +34,7 @@ Route::get('/preview-bib', [HomeController::class, 'previewBib'])->name('home.pr
 Route::get('/api/preview-bib', [AdminController::class, 'cookieGetFotoBIBValue']);
 
 Route::get('/pay/{participant:id}/payment/{payment:id}', [PaymentController::class, 'pay'])->withoutScopedBindings()->name('payment.pay');
+Route::get('/register-success/{participant:id}', [UserController::class, 'registerSuccess'])->name('user.register-success');
 
 Route::middleware('auth')->group(function () {
     Route::get('/dashboard', [AdminController::class, 'index'])->name('admin.index')->middleware(EnsureUserIsOperator::class);
@@ -43,7 +44,6 @@ Route::middleware('auth')->group(function () {
     Route::get('/registration/{ticket:id}', [HomeController::class, 'registerTicket'])->name('user.register-ticket');
     Route::post('/registration-ticket', [UserController::class, 'attemptRegisterTicket'])->name('user.attempt-register-ticket');
 
-    Route::get('/register-success/{participant:id}', [UserController::class, 'registerSuccess'])->name('user.register-success');
 
     Route::get('/trator', [AdminController::class, 'administrator'])->name('admin.administrator')->middleware('can:is-superadmin');
     Route::get('/report', [AdminController::class, 'laporan'])->name('admin.laporan')->middleware(EnsureUserIsAdmin::class);
