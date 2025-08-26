@@ -19,7 +19,7 @@ class ParticipantsExport implements FromCollection, WithHeadings
 
     public function collection()
     {
-        $query = Participant::query()->with(['payment', 'handledBy']);
+        $query = Participant::query()->with(['payment', 'handledBy', 'ticket']);
 
         // Filter pencarian
         if ($search = $this->request->input('search')) {
@@ -52,6 +52,7 @@ class ParticipantsExport implements FromCollection, WithHeadings
         return $query->get()->map(function ($participant) {
             return [
                 'bib'            => $participant->bib,
+                'category'       => $participant->ticket->name,
                 'bib_name'     => $participant->bib_name,
                 'full_name'      => $participant->full_name,
                 'email'          => $participant->email,
@@ -82,6 +83,7 @@ class ParticipantsExport implements FromCollection, WithHeadings
     {
         return [
             'BIB',
+            'Category',
             'First Name',
             'Last Name',
             'Email',
