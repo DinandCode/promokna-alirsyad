@@ -61,7 +61,7 @@
                                 <td class="border p-2 text-center">
                                     {{ ($participants->currentPage() - 1) * $participants->perPage() + $index + 1 }}</td>
                                 <td class="border p-2">{{ $participant->full_name }}</td>
-                                <td class="border p-2">60-{{ $participant->bib }}</td>
+                                <td class="border p-2">{{ $participant->bib }}</td>
                                 <td class="border p-2">{{ $participant->bib_name }}</td>
                                 <td class="border p-2">{{ $participant->phone }}</td>
                                 <td class="border p-2">{{ $participant->email }}</td>

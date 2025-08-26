@@ -51,7 +51,7 @@ class ParticipantsExport implements FromCollection, WithHeadings
 
         return $query->get()->map(function ($participant) {
             return [
-                'bib'            => '60-' . $participant->bib,
+                'bib'            => $participant->bib,
                 'bib_name'     => $participant->bib_name,
                 'full_name'      => $participant->full_name,
                 'email'          => $participant->email,
