@@ -10,11 +10,11 @@
 
     <h2 style="text-align: center; color: #007bff;"><strong>REMINDER!!</strong> <br> {{ \App\Models\Setting::get(\App\Models\Setting::KEY_EVENT_NAME) }}</h2>
 
-    <p>Salam Gowes Bahagia Untuk Semua,</p>
+    <p>Salam Bahagia Untuk Semua,</p>
 
     <p>
         Selamat kamu telah terdaftar dalam kepesertaan <strong>{{ \App\Models\Setting::get(\App\Models\Setting::KEY_EVENT_NAME) }}</strong>.
-        Berikut kami informasikan pengambilan Ride Pack atas nama:
+        Berikut kami informasikan pengambilan Racepack atas nama:
     </p>
 
     <!-- Participant Info Table -->
@@ -23,7 +23,7 @@
             <tr>
                 <td style="padding: 8px; border: 1px solid #ccc;">No. BIB</td>
                 <td style="padding: 8px; border: 1px solid #ccc;">
-                    60-{{ trim($participant->bib) }}
+                    {{ trim($participant->bib) }}
                 </td>
             </tr>
             <tr>
@@ -62,7 +62,7 @@
             <tr>
                 <td style="padding: 8px; border: 1px solid #ccc;">Kategori</td>
                 <td style="padding: 8px; border: 1px solid #ccc;">
-                    {{ $participant->jersey_size ? 'Berbayar' : 'Gratis' }}
+                    {{ $participant->ticket->name }}
                 </td>
             </tr>
             <tr>
@@ -72,7 +72,7 @@
         </tbody>
     </table>
 
-    <p><strong>Dimohon membawa kartu identitas/ktp/sim</strong> saat melakukan pengambilan. Jersey dan No. BIB dapat diambil pada:</p>
+    <p><strong>Dimohon membawa kartu identitas/kis/sim</strong> saat melakukan pengambilan. Jersey dan No. BIB dapat diambil pada:</p>
 
     <table style="width: 100%; border-collapse: collapse; margin-top: 20px;">
         <tbody>

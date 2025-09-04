@@ -327,7 +327,7 @@ class UserController extends Controller
         $participant = DB::table('participants')->where('bib', $bib)->first();
 
         // Ambil ukuran asli gambar
-        $templatePath = public_path('images/BIB MUSLIM FUN RUN.png'); // pastikan pakai .png atau sesuai ekstensi
+        $templatePath = public_path('images/layar-preview.png'); // pastikan pakai .png atau sesuai ekstensi
 
         list($widthPx, $heightPx) = getimagesize($templatePath);
         $dpi = 300; // resolusi cetak
@@ -347,21 +347,21 @@ class UserController extends Controller
         $pdf->SetTextColor(0, 0, 0);
 
         // Offset margin atas biar lebih rapi
-        $yOffset = 20;
+        $yOffset = 1;
 
         // --- Full Name ---
-        $pdf->SetFont('helvetica', '', 18);
+        $pdf->SetFont('helvetica', '', 8);
         $pdf->SetXY(0, $yOffset + 10);
         $pdf->Cell($widthMm, 10, ucwords($participant->full_name), 0, 1, 'C');
 
         // --- BIB Number ---
-        $pdf->SetFont('helvetica', 'B', 80);
-        $pdf->SetXY(0, $yOffset + 30);
+        $pdf->SetFont('helvetica', 'B', 24);
+        $pdf->SetXY(0, $yOffset + 12);
         $pdf->Cell($widthMm, 20, str_pad($participant->bib, 4, "0", STR_PAD_LEFT), 0, 1, 'C');
 
         // --- BIB Name ---
-        $pdf->SetFont('helvetica', '', 40);
-        $pdf->SetXY(0, $yOffset + 70);
+        $pdf->SetFont('helvetica', '', 10);
+        $pdf->SetXY(0, $yOffset + 20);
         $pdf->Cell($widthMm, 20, strtoupper($participant->bib_name), 0, 1, 'C');
 
         // Output

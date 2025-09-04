@@ -94,6 +94,8 @@
                                 x-show='!item.taken_by && !item.taken_phone && !item.taken_relationship'
                                 class="bg-yellow-500 text-white p-2 rounded-lg hover:bg-yellow-600">✏️ Ambil
                                 Racepack</button>
+                        @endcanany
+                        @canany(['is-admin', 'is-superadmin'])
                             <button @click="openForm(item)"
                                 class="bg-yellow-500 text-white p-2 rounded-lg hover:bg-yellow-600">✏️ Edit</button>
                             <button @click="deleteParticipant(item.id)"
@@ -127,7 +129,8 @@
                 <div>
                     <label for="bib_name" class="mb-2 inline-block">Nama BIB / Dada <span
                             class="text-red-600">*</span></label>
-                    <input type="text" id="bib_name" x-model="form.bib_name" class="border p-2 rounded-lg w-full mb-2">
+                    <input type="text" id="bib_name" x-model="form.bib_name"
+                        class="border p-2 rounded-lg w-full mb-2">
                 </div>
                 <div>
                     <label for="full_name" class="mb-2 inline-block">Full Belakang <span
