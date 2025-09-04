@@ -29,7 +29,7 @@ class SendConfirmationEmailJob implements ShouldQueue, ShouldBeUnique
         if ($this->participant->email != '-') {
             $log = MailLog::create([
                 'to' => $this->participant->email ?? '-',
-                'subject' => config('app.name') . ' | Konfirmasi Pengambilan Ridepack',
+                'subject' => config('app.name') . ' | Konfirmasi Pengambilan Racepack',
                 'content' => view('emails.participant_confirmation', [
                     'participant' => $this->participant
                 ])->render(),

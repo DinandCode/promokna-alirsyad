@@ -19,7 +19,7 @@ class ParticipantConfirmationMail extends Mailable
     public function envelope(): Envelope
     {
         return new Envelope(
-            subject:  config('app.name') . ' | Konfirmasi Pengambilan Ridepack',
+            subject:  config('app.name') . ' | Konfirmasi Pengambilan Racepack',
         );
     }
 

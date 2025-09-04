@@ -30,7 +30,7 @@ class SendParticipantConfirmations extends Command
     {
         $paidCount = Participant::whereHas('payment', function ($q) {
             $q->where('status', 'paid');
-        })->count();
+        })->whereNot('email', '-')->count();
 
         $this->info("Anda akan mengirimkan email ke:");
         $this->line(" - $paidCount partisipan berbayar");
@@ -42,7 +42,7 @@ class SendParticipantConfirmations extends Command
 
         $participants = Participant::whereHas('payment', function ($q) {
             $q->where('status', 'paid');
-        })->orWhereDoesntHave('payment')->get();
+        })->whereNot('email', '-')->get();
 
         foreach ($participants as $participant) {
             SendConfirmationEmailJob::dispatch($participant);
