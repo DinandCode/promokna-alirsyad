@@ -79,26 +79,26 @@
             <tr>
                 <td style="padding: 8px; border: 1px solid #ccc;">Hari/Tanggal</td>
                 <td style="padding: 8px; border: 1px solid #ccc;">
-                    Jum'at, 08 Agustus 2025
+                    Sabtu, 06 September 2025
                 </td>
             </tr>
             <tr>
                 <td style="padding: 8px; border: 1px solid #ccc;">Tempat</td>
                 <td style="padding: 8px; border: 1px solid #ccc;">
-                    Samara Cafe & Eatery, Dukuwaluh (<a href="https://maps.app.goo.gl/VyqEzz4eumzjKMND6">https://maps.app.goo.gl/VyqEzz4eumzjKMND6</a>)
+                    SMP AL IRSYAD AL ISLAMIYAH PURWOKERTO (<a href="https://maps.app.goo.gl/c9F4HLecnhtLcfq77">https://maps.app.goo.gl/c9F4HLecnhtLcfq77</a>)
                     <br>
-                    200 Meter ke Utara dari Perempatan Dukuwaluh
+                    Ruang Kelas 7A
                 </td>
             </tr>
             <tr>
                 <td style="padding: 8px; border: 1px solid #ccc;">Waktu</td>
-                <td style="padding: 8px; border: 1px solid #ccc;">13:00 - 21:00 WIB</td>
+                <td style="padding: 8px; border: 1px solid #ccc;">09:00 - 15:00 WIB</td>
             </tr>
         </tbody>
     </table>
 
     <p>
-        Tunjukkan Email ini saat pengambilan Ride Pack {{ \App\Models\Setting::get(\App\Models\Setting::KEY_EVENT_NAME) }}.
+        Tunjukkan Email ini saat pengambilan Race Pack {{ \App\Models\Setting::get(\App\Models\Setting::KEY_EVENT_NAME) }}.
         <strong>Catatan:</strong> Tidak Menerima Pengambilan Diluar yang telah ditentukan.
     </p>
 
