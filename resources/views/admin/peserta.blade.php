@@ -89,7 +89,7 @@
                         </template>
                     </div>
                     <div class="flex justify-end gap-2 p-2">
-                        @canany(['is-admin', 'is-superadmin'])
+                        @canany(['is-admin', 'is-superadmin', 'is-operator'])
                             <button @click="openRacepackRetrievalForm(item)"
                                 x-show='!item.taken_by && !item.taken_phone && !item.taken_relationship'
                                 class="bg-yellow-500 text-white p-2 rounded-lg hover:bg-yellow-600">✏️ Ambil
