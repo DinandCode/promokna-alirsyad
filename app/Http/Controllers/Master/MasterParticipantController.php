@@ -61,7 +61,7 @@ class MasterParticipantController extends Controller
             'birthdate'  => 'nullable|date',
             'address'    => 'nullable|string',
             'city'       => 'nullable|string|max:255',
-            'jersey_size' => 'nullable|in:XXS,XS,S,M,L,XL,2XL,3XL,4XL,5XL,6XL',
+            'jersey_size' => 'nullable',
             'blood_type' => 'nullable|string|max:5',
             'medical_history' => 'nullable|string',
             'medical_note'    => 'nullable|string',
