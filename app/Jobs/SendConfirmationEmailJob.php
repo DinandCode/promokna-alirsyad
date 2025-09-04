@@ -26,7 +26,7 @@ class SendConfirmationEmailJob implements ShouldQueue, ShouldBeUnique
 
     public function handle()
     {
-        if ($this->participant->email) {
+        if ($this->participant->email != '-') {
             $log = MailLog::create([
                 'to' => $this->participant->email ?? '-',
                 'subject' => config('app.name') . ' | Konfirmasi Pengambilan Ridepack',
