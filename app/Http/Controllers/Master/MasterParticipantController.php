@@ -50,8 +50,8 @@ class MasterParticipantController extends Controller
     public function store(Request $request)
     {
         $validator = Validator::make($request->all(), [
-            'first_name' => 'required|string|max:255',
-            'last_name'  => 'required|string|max:255',
+            'bib_name' => 'required|string|max:255',
+            'full_name'  => 'required|string|max:255',
             'email'      => 'required|email|unique:participants,email',
             'phone'      => 'required|string|max:20',
             'community'  => 'nullable|string|max:255',
@@ -94,8 +94,8 @@ class MasterParticipantController extends Controller
     public function update(Request $request, Participant $participant)
     {
         $validator = Validator::make($request->all(), [
-            'first_name' => 'sometimes|required|string|max:255',
-            'last_name'  => 'sometimes|required|string|max:255',
+            'bib_name' => 'sometimes|required|string|max:255',
+            'full_name'  => 'sometimes|required|string|max:255',
             'email'      => 'sometimes|required|email|unique:participants,email,' . $participant->id,
             'phone'      => 'sometimes|required|string|max:20',
             'community'  => 'nullable|string|max:255',
