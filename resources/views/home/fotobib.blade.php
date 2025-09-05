@@ -49,7 +49,7 @@
                     .then(participant => {
                         if (!participant.bib) return;
                         document.querySelector('#bibNumber').innerText = participant.bib;
-                        document.querySelector('#fullName').innerText = participant.full_name;
+                        document.querySelector('#fullName').innerText = participant.bib_name;
                     });
             }, 1000);
         });
